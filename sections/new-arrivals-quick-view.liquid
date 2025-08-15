@@ -1,0 +1,647 @@
+<style>
+  .new-arrivals-section {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 4rem 0;
+  }
+
+  /* Text position variants */
+  .new-arrivals-section--text-left {
+    grid-template-columns: 1fr 3fr;
+  }
+
+  .new-arrivals-section--text-left .new-arrivals-text {
+    order: 1;
+  }
+
+  .new-arrivals-section--text-left .new-arrivals-slider {
+    order: 2;
+  }
+
+  .new-arrivals-section--text-right .new-arrivals-text {
+    order: 2;
+  }
+
+  .new-arrivals-section--text-right .new-arrivals-slider {
+    order: 1;
+  }
+
+  .new-arrivals-slider {
+    width: 100%;
+    position: relative;
+  }
+
+  .slider-component {
+    position: relative;
+  }
+
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: #f5f5f5;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    font-size: 2.2rem;
+    color: #bdbdbd;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: color 0.2s, opacity 0.2s, background 0.2s;
+  }
+
+  .slider-arrow:hover {
+    color: #333;
+    background: #e0e0e0;
+    opacity: 1;
+  }
+
+  .slider-arrow--left {
+    left: -32px;
+  }
+
+  .slider-arrow--right {
+    right: -32px;
+  }
+
+  .slider-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    gap: 1.5rem;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slider-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slider-item {
+    flex: 0 0 calc(33.33% - 1rem);
+    max-width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .new-arrivals-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-left: 1rem;
+    height: 100%;
+  }
+
+  .new-arrivals-text h1 {
+    font-size: 32px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    color: #000;
+    font-weight: 900;
+    margin: 0 0 1.2rem 0;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  .new-arrivals-text p {
+    font-size: 20px;
+    color: #222;
+    margin: 0 0 2.1rem 0;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 400;
+  }
+
+  .view-collection-btn {
+    font-size: 1.2rem;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 900;
+    color: #000;
+    text-transform: uppercase;
+    text-decoration: underline;
+    letter-spacing: 0.04em;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+    display: inline-block;
+  }
+  .view-collection-btn:hover {
+    color: #e91e63;
+    text-decoration: underline;
+  }
+  .new-arrivals-fallback {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #888;
+    font-size: 1.2rem;
+    padding: 3rem 0;
+  }
+
+  /* Product Card with Quick View Styles */
+  .product-card-container {
+    position: relative;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .product-card-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .product-card-image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+    background: #f9f9f9;
+  }
+
+  .product-card-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .product-card-image-link:hover {
+    color: #e91e63;
+  }
+
+  .product-card-image-link:hover ~ .product-card-info .product-card-title,
+  .product-card-image-link:hover ~ .product-card-info .product-card-title a,
+  .product-card-image-link:hover ~ .product-card-info .product-card-price {
+    color: #e91e63;
+  }
+
+  .product-card-image-link:focus {
+    outline: 2px solid rgba(0,0,0,0.3);
+    outline-offset: 2px;
+  }
+
+  .product-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card-container:hover .product-card-image img {
+    transform: scale(1.05);
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #e91e63;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+
+  .product-card-info {
+    padding: 16px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+
+  .product-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    /* Constrain title height to 2 lines max */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.6em; /* Ensure consistent height even for short titles */
+  }
+
+  .product-card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .product-card-title a:hover {
+    color: #e91e63;
+  }
+
+  .product-card-vendor {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .product-card-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  .product-card-price--compare {
+    color: #999;
+    text-decoration: line-through;
+    font-weight: normal;
+    margin-right: 8px;
+  }
+
+  .product-card-price--sale {
+    color: #e91e63;
+  }
+
+  /* Content grouping for better alignment */
+  .product-card-content-top {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .product-card-content-bottom {
+    margin-top: auto;
+  }
+
+  @media (max-width: 768px) {
+    .new-arrivals-section,
+    .new-arrivals-section--text-left,
+    .new-arrivals-section--text-right {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 2rem 0;
+    }
+
+    .new-arrivals-text {
+      padding: 0 1rem;
+      order: 1 !important;
+    }
+
+    .new-arrivals-text h1 {
+      font-size: 24px;
+      margin-bottom: 0.8rem;
+    }
+
+    .new-arrivals-text p {
+      font-size: 16px;
+      margin-bottom: 1.5rem;
+    }
+
+    .new-arrivals-slider {
+      order: 2 !important;
+      padding: 0;
+      margin: 0 -1rem;
+    }
+
+    .slider-container {
+      padding: 0 1rem;
+      gap: 1rem;
+    }
+
+    .slider-item {
+      flex: 0 0 calc(100% - 2rem);
+      padding: 0;
+    }
+
+    .slider-arrow {
+      display: none;
+    }
+
+    .product-card-container {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .product-card-info {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+  }
+</style>
+
+<div class="new-arrivals-section page-width{% if section.settings.text_position == 'left' %} new-arrivals-section--text-left{% else %} new-arrivals-section--text-right{% endif %}">
+  {%- assign featured_collection = collections[section.settings.collection] -%}
+  {%- assign products_to_display = featured_collection.products | size | at_most: 10 -%}
+  {%- if featured_collection and featured_collection.products.size > 0 -%}
+    <!-- Column 1: The Slider (3/4 width) -->
+    <div class="new-arrivals-slider slider-component">
+      <button class="slider-arrow slider-arrow--left" aria-label="Scroll left" type="button">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <ul class="slider-container">
+        {%- for product in featured_collection.products limit: 10 -%}
+          <li class="slider-item">
+            <div class="product-card-container">
+              {%- if product.featured_media -%}
+                <div class="product-card-image">
+                  <a href="{{ product.url }}" class="product-card-image-link" aria-label="{{ product.title | escape }}">
+                    <img
+                      srcset="
+                        {%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                        {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                        {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+                      "
+                      src="{{ product.featured_media | image_url: width: 533 }}"
+                      sizes="(min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                      alt="{{ product.featured_media.alt | escape }}"
+                      loading="lazy"
+                      width="{{ product.featured_media.width }}"
+                      height="{{ product.featured_media.height }}"
+                    >
+                  </a>
+
+                  <!-- Product Badges -->
+                  {%- if product.available == false -%}
+                    <span class="product-badge">
+                      {{- 'products.product.sold_out' | t -}}
+                    </span>
+                  {%- elsif product.compare_at_price > product.price and product.available -%}
+                    <span class="product-badge">
+                      {{- 'products.product.on_sale' | t -}}
+                    </span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              <div class="product-card-info">
+                <div class="product-card-content-top">
+                  {%- if section.settings.show_vendor and product.vendor != blank -%}
+                    <div class="product-card-vendor">{{ product.vendor }}</div>
+                  {%- endif -%}
+
+                  <h3 class="product-card-title">
+                    <a href="{{ product.url }}">
+                      {{ product.title | escape }}
+                    </a>
+                  </h3>
+                </div>
+
+                <div class="product-card-content-bottom">
+                  <div class="product-card-price">
+                    {%- if product.compare_at_price > product.price and product.available -%}
+                      <span class="product-card-price--compare">
+                        {{ product.compare_at_price | money }}
+                      </span>
+                      <span class="product-card-price--sale">
+                        {{ product.price | money }}
+                      </span>
+                    {%- else -%}
+                      {{ product.price | money }}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+      <button class="slider-arrow slider-arrow--right" aria-label="Scroll right" type="button">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Column 2: The Text Content (1/4 width, centered) -->
+    <div class="new-arrivals-text">
+      <h1>{{ section.settings.heading }}</h1>
+      <p>{{ section.settings.subheading }}</p>
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="view-collection-btn">{{ section.settings.button_text }}</a>
+      {% endif %}
+    </div>
+  {%- else -%}
+    <div class="new-arrivals-fallback">Please select a collection with products in the section settings.</div>
+  {%- endif -%}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Slider functionality
+    const sliderContainer = document.querySelector('.slider-container');
+    const leftArrow = document.querySelector('.slider-arrow--left');
+    const rightArrow = document.querySelector('.slider-arrow--right');
+    const sliderCounter = document.querySelector('.slider-counter');
+    const slides = document.querySelectorAll('.slider-item');
+    let currentSlide = 1;
+
+    function updateCounter() {
+      if (sliderCounter) {
+        sliderCounter.querySelector('.slider-counter--current').textContent = currentSlide;
+        sliderCounter.querySelector('.slider-counter--total').textContent = slides.length;
+      }
+    }
+
+    if (leftArrow && rightArrow && sliderContainer) {
+      leftArrow.addEventListener('click', function() {
+        sliderContainer.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+
+      rightArrow.addEventListener('click', function() {
+        sliderContainer.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    }
+
+    // Mobile touch slider functionality
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    sliderContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    sliderContainer.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0 && currentSlide < slides.length) {
+          // Swipe left
+          currentSlide++;
+        } else if (diff < 0 && currentSlide > 1) {
+          // Swipe right
+          currentSlide--;
+        }
+        updateCounter();
+      }
+    }
+
+    // Initial counter setup
+    updateCounter();
+
+    // Intersection Observer for slide tracking
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const slideIndex = Array.from(slides).indexOf(entry.target) + 1;
+          currentSlide = slideIndex;
+          updateCounter();
+        }
+      });
+    }, options);
+
+    slides.forEach(slide => observer.observe(slide));
+  });
+</script>
+
+{% schema %}
+{
+  "name": "New Arrivals Quick View",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "NEW ARRIVALS"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Get it here before anywhere else.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop All"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection to display"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "right",
+      "label": "Text position",
+      "info": "Choose whether to display the text content on the left or right side"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "square",
+      "label": "Image ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show rating"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "background-1",
+      "label": "Color scheme"
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Arrivals Quick View"
+    }
+  ]
+}
+{% endschema %}

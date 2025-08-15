@@ -1,0 +1,385 @@
+{{ 'skincare-quiz.css' | asset_url | stylesheet_tag }}
+
+<div class="skincare-quiz-wrapper" id="skincareQuiz">
+  <div class="quiz-container">
+    <!-- Progress Bar -->
+    <div class="quiz-progress">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-text">
+        <span id="currentStep">1</span> of <span id="totalSteps">6</span>
+      </div>
+    </div>
+
+    <!-- Quiz Content -->
+    <div class="quiz-content" id="quizContent">
+      
+      <!-- Introduction/Get Started Screen -->
+      <div class="quiz-intro active" id="quizIntro">
+        <div class="intro-content">
+          <div class="intro-icon">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#00bcd4" stroke-width="1.5">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </div>
+          <h2 class="intro-title">{{ section.settings.intro_title | default: "Find Your Perfect Skincare Routine" }}</h2>
+          <p class="intro-subtitle">{{ section.settings.intro_subtitle | default: "Take our personalized quiz to discover products tailored specifically to your skin's unique needs." }}</p>
+          
+          <div class="intro-features">
+            <div class="feature-item">
+              <div class="feature-icon">⚡</div>
+              <span>Takes only 2 minutes</span>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🎯</div>
+              <span>Personalized recommendations</span>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">✨</div>
+              <span>Expert-curated products</span>
+            </div>
+          </div>
+
+          <div class="intro-preview">
+            <h3>What You'll Discover:</h3>
+            <ul class="preview-list">
+              <li>✓ Your ideal cleanser for your skin type</li>
+              <li>✓ Perfect moisturizer for daily hydration</li>
+              <li>✓ Targeted treatments for your concerns</li>
+              <li>✓ Complete routine recommendations</li>
+            </ul>
+          </div>
+
+          <button class="get-started-btn" id="getStartedBtn">
+            <span>Get Started</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <p class="intro-disclaimer">{{ section.settings.intro_disclaimer | default: "No email required to start • Your privacy is protected" }}</p>
+        </div>
+      </div>
+      
+      <!-- Question 1: Age Range -->
+      <div class="quiz-question" data-question="1">
+        <div class="question-content">
+          <h2 class="question-title">{{ section.settings.question_1_title | default: "What's your age range?" }}</h2>
+          <div class="answer-grid">
+            <button class="answer-btn" data-value="16-19" data-question="age">16+</button>
+            <button class="answer-btn" data-value="20-29" data-question="age">20s</button>
+            <button class="answer-btn" data-value="30-39" data-question="age">30s</button>
+            <button class="answer-btn" data-value="40-49" data-question="age">40s</button>
+            <button class="answer-btn" data-value="50+" data-question="age">50+</button>
+            <button class="answer-btn" data-value="prefer-not" data-question="age">Prefer Not To Answer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 2: Skin Type -->
+      <div class="quiz-question" data-question="2">
+        <div class="question-content">
+          <h2 class="question-title">What's your skin type?</h2>
+          <div class="answer-grid">
+            <button class="answer-btn" data-value="oily" data-question="skin-type">
+              <span class="answer-emoji">💧</span>
+              <span class="answer-text">Oily</span>
+              <span class="answer-desc">Shiny, enlarged pores</span>
+            </button>
+            <button class="answer-btn" data-value="dry" data-question="skin-type">
+              <span class="answer-emoji">🏜️</span>
+              <span class="answer-text">Dry</span>
+              <span class="answer-desc">Tight, flaky feeling</span>
+            </button>
+            <button class="answer-btn" data-value="combination" data-question="skin-type">
+              <span class="answer-emoji">⚖️</span>
+              <span class="answer-text">Combination</span>
+              <span class="answer-desc">Oily T-zone, dry cheeks</span>
+            </button>
+            <button class="answer-btn" data-value="sensitive" data-question="skin-type">
+              <span class="answer-emoji">🌹</span>
+              <span class="answer-text">Sensitive</span>
+              <span class="answer-desc">Easily irritated, reactive</span>
+            </button>
+            <button class="answer-btn" data-value="normal" data-question="skin-type">
+              <span class="answer-emoji">✨</span>
+              <span class="answer-text">Normal</span>
+              <span class="answer-desc">Balanced, few issues</span>
+            </button>
+            <button class="answer-btn" data-value="not-sure" data-question="skin-type">
+              <span class="answer-emoji">🤔</span>
+              <span class="answer-text">Not Sure</span>
+              <span class="answer-desc">Help me figure it out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 3: Main Concerns -->
+      <div class="quiz-question" data-question="3">
+        <div class="question-content">
+          <h2 class="question-title">What are your main skin concerns?</h2>
+          <p class="question-subtitle">Select all that apply</p>
+          <div class="answer-grid multi-select">
+            <button class="answer-btn multi" data-value="acne" data-question="concerns">
+              <span class="answer-emoji">🔴</span>
+              <span class="answer-text">Acne & Breakouts</span>
+            </button>
+            <button class="answer-btn multi" data-value="aging" data-question="concerns">
+              <span class="answer-emoji">⏰</span>
+              <span class="answer-text">Anti-Aging</span>
+            </button>
+            <button class="answer-btn multi" data-value="dark-spots" data-question="concerns">
+              <span class="answer-emoji">🌑</span>
+              <span class="answer-text">Dark Spots</span>
+            </button>
+            <button class="answer-btn multi" data-value="dryness" data-question="concerns">
+              <span class="answer-emoji">💧</span>
+              <span class="answer-text">Dryness</span>
+            </button>
+            <button class="answer-btn multi" data-value="dullness" data-question="concerns">
+              <span class="answer-emoji">💎</span>
+              <span class="answer-text">Dullness</span>
+            </button>
+            <button class="answer-btn multi" data-value="pores" data-question="concerns">
+              <span class="answer-emoji">🔍</span>
+              <span class="answer-text">Large Pores</span>
+            </button>
+            <button class="answer-btn multi" data-value="sensitivity" data-question="concerns">
+              <span class="answer-emoji">⚡</span>
+              <span class="answer-text">Sensitivity</span>
+            </button>
+            <button class="answer-btn multi" data-value="uneven-tone" data-question="concerns">
+              <span class="answer-emoji">🎨</span>
+              <span class="answer-text">Uneven Tone</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 4: Current Routine -->
+      <div class="quiz-question" data-question="4">
+        <div class="question-content">
+          <h2 class="question-title">How complex is your current routine?</h2>
+          <div class="answer-grid vertical">
+            <button class="answer-btn vertical-btn" data-value="minimal" data-question="routine">
+              <span class="answer-text">Minimal</span>
+              <span class="answer-desc">Just cleanser and moisturizer</span>
+            </button>
+            <button class="answer-btn vertical-btn" data-value="basic" data-question="routine">
+              <span class="answer-text">Basic</span>
+              <span class="answer-desc">Cleanser, moisturizer, sunscreen</span>
+            </button>
+            <button class="answer-btn vertical-btn" data-value="moderate" data-question="routine">
+              <span class="answer-text">Moderate</span>
+              <span class="answer-desc">5-7 products, morning and night</span>
+            </button>
+            <button class="answer-btn vertical-btn" data-value="extensive" data-question="routine">
+              <span class="answer-text">Extensive</span>
+              <span class="answer-desc">10+ products, multi-step routine</span>
+            </button>
+            <button class="answer-btn vertical-btn" data-value="none" data-question="routine">
+              <span class="answer-text">No Routine</span>
+              <span class="answer-desc">Looking to start from scratch</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 5: Budget -->
+      <div class="quiz-question" data-question="5">
+        <div class="question-content">
+          <h2 class="question-title">What's your monthly skincare budget?</h2>
+          <div class="answer-grid">
+            <button class="answer-btn" data-value="under-50" data-question="budget">
+              <span class="answer-text">Under $50</span>
+              <span class="answer-desc">Budget-friendly options</span>
+            </button>
+            <button class="answer-btn" data-value="50-100" data-question="budget">
+              <span class="answer-text">$50 - $100</span>
+              <span class="answer-desc">Moderate investment</span>
+            </button>
+            <button class="answer-btn" data-value="100-200" data-question="budget">
+              <span class="answer-text">$100 - $200</span>
+              <span class="answer-desc">Premium products</span>
+            </button>
+            <button class="answer-btn" data-value="200-plus" data-question="budget">
+              <span class="answer-text">$200+</span>
+              <span class="answer-desc">Luxury skincare</span>
+            </button>
+            <button class="answer-btn" data-value="no-budget" data-question="budget">
+              <span class="answer-text">No Specific Budget</span>
+              <span class="answer-desc">Best results matter most</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 6: Goals -->
+      <div class="quiz-question" data-question="6">
+        <div class="question-content">
+          <h2 class="question-title">What's your main skincare goal?</h2>
+          <div class="answer-grid">
+            <button class="answer-btn" data-value="prevention" data-question="goals">
+              <span class="answer-emoji">🛡️</span>
+              <span class="answer-text">Prevention</span>
+              <span class="answer-desc">Maintain healthy skin</span>
+            </button>
+            <button class="answer-btn" data-value="treatment" data-question="goals">
+              <span class="answer-emoji">🩹</span>
+              <span class="answer-text">Treatment</span>
+              <span class="answer-desc">Fix specific issues</span>
+            </button>
+            <button class="answer-btn" data-value="glow" data-question="goals">
+              <span class="answer-emoji">✨</span>
+              <span class="answer-text">Glow Up</span>
+              <span class="answer-desc">Radiant, glowing skin</span>
+            </button>
+            <button class="answer-btn" data-value="anti-aging" data-question="goals">
+              <span class="answer-emoji">⏰</span>
+              <span class="answer-text">Anti-Aging</span>
+              <span class="answer-desc">Youthful appearance</span>
+            </button>
+            <button class="answer-btn" data-value="simplify" data-question="goals">
+              <span class="answer-emoji">🎯</span>
+              <span class="answer-text">Simplify</span>
+              <span class="answer-desc">Easy, effective routine</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Page -->
+      <div class="quiz-results hidden" id="quizResults">
+        <div class="results-content">
+          <h2 class="results-title">Your Personalized Skincare Routine</h2>
+          <div class="results-summary" id="resultsSummary">
+            <!-- Dynamic content will be inserted here -->
+          </div>
+          
+          <div class="recommended-products" id="recommendedProducts">
+            <!-- Product recommendations will be inserted here -->
+          </div>
+
+          <div class="results-actions">
+            <button class="btn-primary" id="shopRecommendations">Shop Your Routine</button>
+            <button class="btn-secondary" id="retakeQuiz">Retake Quiz</button>
+            <button class="btn-secondary" id="saveResults">Save Results</button>
+          </div>
+
+          <div class="email-capture" id="emailCapture">
+            <h3>Get Your Results & Exclusive Tips</h3>
+            <form class="email-form" id="emailForm">
+              <input type="email" placeholder="Enter your email" required id="emailInput">
+              <button type="submit">Send My Results</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="quiz-navigation">
+      <button class="nav-btn back-btn" id="backBtn" disabled>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back
+      </button>
+      <button class="nav-btn next-btn" id="nextBtn" disabled>
+        Next
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'skincare-quiz.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Skincare Quiz",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "question_1_title",
+      "label": "Question 1 Title",
+      "default": "What's your age range?"
+    },
+    {
+      "type": "collection",
+      "id": "cleanser_collection",
+      "label": "Cleanser Collection"
+    },
+    {
+      "type": "collection",
+      "id": "moisturizer_collection",
+      "label": "Moisturizer Collection"
+    },
+    {
+      "type": "collection",
+      "id": "serum_collection",
+      "label": "Serum Collection"
+    },
+    {
+      "type": "collection",
+      "id": "treatment_collection",
+      "label": "Treatment Collection"
+    },
+    {
+      "type": "collection",
+      "id": "sunscreen_collection",
+      "label": "Sunscreen Collection"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Color",
+      "default": "#00bcd4"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#ff6b9d"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Skincare Quiz"
+    }
+  ]
+}
+{% endschema %}

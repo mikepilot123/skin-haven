@@ -1,0 +1,573 @@
+<style>
+  .email-subscription {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .email-subscription__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+  }
+
+  .email-subscription__heading {
+    font-size: {{ section.settings.heading_size }}px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 700;
+    color: {{ section.settings.heading_color }};
+    margin: 0 0 1rem 0;
+    letter-spacing: 0.02em;
+    text-transform: {{ section.settings.heading_transform }};
+    line-height: 1.2;
+  }
+
+  .email-subscription__subheading {
+    font-size: {{ section.settings.subheading_size }}px;
+    color: {{ section.settings.subheading_color }};
+    margin: 0 0 2rem 0;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  .email-subscription__form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .email-subscription__input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    font-size: 16px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    border: 2px solid {{ section.settings.input_border_color }};
+    border-radius: 30px;
+    background: {{ section.settings.input_background }};
+    color: {{ section.settings.input_text_color }};
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .email-subscription__input::placeholder {
+    color: {{ section.settings.placeholder_color }};
+    opacity: 0.8;
+  }
+
+  .email-subscription__input:focus {
+    border-color: {{ section.settings.input_focus_border }};
+    box-shadow: 0 0 0 3px {{ section.settings.input_focus_shadow }};
+  }
+
+  .email-subscription__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 1rem 2rem;
+    background: {{ section.settings.button_background }};
+    color: {{ section.settings.button_color }};
+    border: 2px solid {{ section.settings.button_border }};
+    border-radius: 30px;
+    font-size: 16px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .email-subscription__button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
+    z-index: 1;
+  }
+
+  .email-subscription__button:hover::before {
+    left: 100%;
+  }
+
+  .email-subscription__button span {
+    position: relative;
+    z-index: 2;
+  }
+
+  .email-subscription__button:hover {
+    background: {{ section.settings.button_hover_background }};
+    color: {{ section.settings.button_hover_color }};
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+
+  .email-subscription__disclaimer {
+    font-size: {{ section.settings.disclaimer_size }}px;
+    color: {{ section.settings.disclaimer_color }};
+    margin-top: 1.5rem;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .email-subscription__disclaimer a {
+    color: inherit;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+  }
+
+  .email-subscription__disclaimer a:hover {
+    color: {{ section.settings.heading_color }};
+  }
+
+  /* Success and Error Messages */
+  .email-subscription__message {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+  }
+
+  .email-subscription__message--success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .email-subscription__message--error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .email-subscription__message.show {
+    display: block;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .email-subscription__container {
+      padding: 0 1rem;
+    }
+
+    .email-subscription__form {
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .email-subscription__input {
+      width: 100%;
+      max-width: none;
+    }
+
+    .email-subscription__button {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .email-subscription__heading {
+      font-size: {{ section.settings.heading_size | times: 0.8 }}px;
+    }
+
+    .email-subscription__subheading {
+      font-size: {{ section.settings.subheading_size | times: 0.9 }}px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .email-subscription__heading {
+      font-size: {{ section.settings.heading_size | times: 0.7 }}px;
+    }
+
+    .email-subscription__input,
+    .email-subscription__button {
+      padding: 0.875rem 1.25rem;
+      font-size: 14px;
+    }
+  }
+</style>
+
+<section class="email-subscription">
+  <div class="email-subscription__container page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="email-subscription__heading">
+        {{ section.settings.heading | escape }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.subheading != blank %}
+      <p class="email-subscription__subheading">
+        {{ section.settings.subheading | escape }}
+      </p>
+    {% endif %}
+
+    <form class="email-subscription__form" action="{{ routes.cart_add_url }}" method="post" id="email-subscription-form">
+      <input 
+        type="email" 
+        name="contact[email]"
+        class="email-subscription__input"
+        placeholder="{{ section.settings.placeholder_text | default: 'Enter your email address...' | escape }}"
+        required
+        aria-label="Email address"
+      >
+      <button type="submit" class="email-subscription__button">
+        <span>{{ section.settings.button_text | default: 'Sign Up' | escape }}</span>
+      </button>
+    </form>
+
+    <div class="email-subscription__message email-subscription__message--success" id="success-message">
+      {{ section.settings.success_message | default: 'Thank you for subscribing!' | escape }}
+    </div>
+
+    <div class="email-subscription__message email-subscription__message--error" id="error-message">
+      {{ section.settings.error_message | default: 'Something went wrong. Please try again.' | escape }}
+    </div>
+
+    {% if section.settings.disclaimer != blank %}
+      <p class="email-subscription__disclaimer">
+        {{ section.settings.disclaimer }}
+      </p>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('email-subscription-form');
+  const successMessage = document.getElementById('success-message');
+  const errorMessage = document.getElementById('error-message');
+  const submitButton = form.querySelector('.email-subscription__button');
+  const emailInput = form.querySelector('.email-subscription__input');
+
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Hide previous messages
+      successMessage.classList.remove('show');
+      errorMessage.classList.remove('show');
+      
+      // Show loading state
+      submitButton.style.opacity = '0.7';
+      submitButton.style.pointerEvents = 'none';
+      const originalText = submitButton.querySelector('span').textContent;
+      submitButton.querySelector('span').textContent = 'Subscribing...';
+      
+      // Get email value
+      const email = emailInput.value;
+      
+      // Create customer data
+      const customerData = {
+        'contact[email]': email,
+        'contact[tags]': 'newsletter',
+        'form_type': 'customer'
+      };
+      
+      // Submit to Shopify customer API
+      fetch('{{ routes.contact_url }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        },
+        body: new URLSearchParams(customerData)
+      })
+      .then(response => {
+        if (response.ok) {
+          successMessage.classList.add('show');
+          emailInput.value = '';
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        errorMessage.classList.add('show');
+      })
+      .finally(() => {
+        // Reset button state
+        submitButton.style.opacity = '1';
+        submitButton.style.pointerEvents = 'auto';
+        submitButton.querySelector('span').textContent = originalText;
+      });
+    });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Email Subscription",
+  "tag": "section",
+  "class": "section-email-subscription",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Sign Up For Our Email List",
+      "info": "Main heading for the subscription section"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Get the latest updates, exclusive offers, and new product announcements.",
+      "info": "Optional subheading text"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Email Placeholder Text",
+      "default": "Enter your email address...",
+      "info": "Placeholder text shown in the email input field"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Sign Up",
+      "info": "Text displayed on the submit button"
+    },
+    {
+      "type": "richtext",
+      "id": "disclaimer",
+      "label": "Disclaimer Text",
+      "default": "<p>I agree to receive promotional emails. You can unsubscribe at any time. <a href=\"/policies/privacy-policy\">Privacy Policy</a>.</p>",
+      "info": "Optional disclaimer text with links"
+    },
+    {
+      "type": "header",
+      "content": "Messages"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Thank you for subscribing! Check your email for confirmation.",
+      "info": "Message shown when subscription is successful"
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Error Message",
+      "default": "Something went wrong. Please try again.",
+      "info": "Message shown when subscription fails"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "default": 32,
+      "unit": "px",
+      "label": "Heading font size"
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px",
+      "label": "Subheading font size"
+    },
+    {
+      "type": "range",
+      "id": "disclaimer_size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "default": 14,
+      "unit": "px",
+      "label": "Disclaimer font size"
+    },
+    {
+      "type": "select",
+      "id": "heading_transform",
+      "options": [
+        {
+          "value": "none",
+          "label": "Normal"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        }
+      ],
+      "default": "uppercase",
+      "label": "Heading text transform"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "disclaimer_color",
+      "label": "Disclaimer color",
+      "default": "#888888"
+    },
+    {
+      "type": "header",
+      "content": "Input Field Colors"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Input background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Input text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "color",
+      "id": "input_focus_border",
+      "label": "Input focus border",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "input_focus_shadow",
+      "label": "Input focus shadow",
+      "default": "rgba(0,0,0,0.1)"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder text color",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Button Colors"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "transparent"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_border",
+      "label": "Button border color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "unit": "px",
+      "label": "Top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "unit": "px",
+      "label": "Bottom padding"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Email Subscription"
+    }
+  ]
+}
+{% endschema %}

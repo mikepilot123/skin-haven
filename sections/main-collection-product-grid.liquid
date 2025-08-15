@@ -1,0 +1,739 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'collection-custom-styles.css' | asset_url | stylesheet_tag }}
+{{ 'product-card-enhanced.css' | asset_url | stylesheet_tag }}
+
+{% if section.settings.image_shape == 'blob' %}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+{%- endunless -%}
+
+{%- if section.settings.quick_add == 'standard' -%}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- if section.settings.quick_add == 'bulk' -%}
+  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    <!-- New Compact Collection Banner -->
+    <div class="collection-banner">
+      <div class="collection-banner__content">
+        <div class="collection-banner__left">
+          <button class="filter-toggle" id="filterToggle">
+            <span>FILTER</span>
+            <span class="filter-toggle__icon">+</span>
+          </button>
+        </div>
+        
+        <div class="collection-banner__center">
+          <h1 class="collection-banner__title">{{ collection.title | upcase }}</h1>
+        </div>
+        
+        <div class="collection-banner__right">
+          <div class="sort-wrapper">
+            <label for="SortBy" class="sort-label">SORT BY</label>
+            <div class="sort-select">
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              <select name="sort_by" class="sort-dropdown" id="SortBy">
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value | escape }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                    {{ option.name | escape }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Dropdown Panel -->
+    <div class="filter-panel hide" id="filterPanel">
+      <div class="filter-panel__content">
+        <div class="filter-grid">
+          {%- for filter in collection.filters -%}
+            <div class="filter-group">
+              <h3 class="filter-group__title">{{ filter.label | upcase }}</h3>
+              <div class="filter-options">
+                {%- for value in filter.values -%}
+                  <label class="filter-option">
+                    <input 
+                      type="checkbox" 
+                      name="{{ filter.param_name }}" 
+                      value="{{ value.value }}"
+                      {% if value.active %}checked{% endif %}
+                      {% if value.label == 'Dewy' %}class="special-highlight"{% endif %}
+                    >
+                    <span class="filter-option__label">{{ value.label }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="page-width">
+
+      <div
+        class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+        id="ProductGridContainer"
+        {% if settings.animations_reveal_on_scroll %}
+          data-cascade
+        {% endif %}
+      >
+        {%- if collection.products.size == 0 -%}
+          <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
+            <div class="loading-overlay gradient"></div>
+            <div class="title-wrapper center">
+              <h2 class="title title--primary">
+                {{ 'sections.collection_template.empty' | t -}}
+                <br>
+                {{
+                  'sections.collection_template.use_fewer_filters_html'
+                  | t: link: collection.url, class: 'underlined-link link'
+                }}
+              </h2>
+            </div>
+          </div>
+        {%- else -%}
+          <div
+            class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+          >
+            <div class="loading-overlay gradient"></div>
+            <ul
+              id="product-grid"
+              data-id="{{ section.id }}"
+              class="
+                grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
+                grid--{{ section.settings.columns_desktop }}-col-desktop
+                {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
+              "
+            >
+              {% assign skip_card_product_styles = false %}
+              {%- for product in collection.products -%}
+                {% assign lazy_load = false %}
+                {%- if forloop.index > 2 -%}
+                  {%- assign lazy_load = true -%}
+                {%- endif -%}
+                <li
+                  class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                  {% if settings.animations_reveal_on_scroll %}
+                    data-cascade
+                    style="--animation-order: {{ forloop.index }};"
+                  {% endif %}
+                  data-product-id="{{ product.id }}"
+                  data-product-type="{{ product.type | downcase | replace: ' ', '-' }}"
+                  data-product-vendor="{{ product.vendor | downcase | replace: ' ', '-' }}"
+                  data-product-tags="{{ product.tags | join: ',' | downcase | replace: ' ', '-' }}"
+                  data-filter-v-availability="{% if product.available %}1{% else %}0{% endif %}"
+                  data-availability="{% if product.available %}in-stock{% else %}out-of-stock{% endif %}"
+                  data-price="{{ product.price }}"
+                >
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: 'square',
+                    image_shape: section.settings.image_shape,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_rating: section.settings.show_rating,
+                    lazy_load: lazy_load,
+                    skip_styles: skip_card_product_styles,
+                    quick_add: section.settings.quick_add,
+                    section_id: section.id
+                  %}
+                </li>
+                {%- assign skip_card_product_styles = true -%}
+              {%- endfor -%}
+            </ul>
+
+            {%- if paginate.pages > 1 -%}
+              {% render 'pagination', paginate: paginate, anchor: '' %}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endpaginate -%}
+  {% if section.settings.image_shape == 'arch' %}
+    {{ 'mask-arch.svg' | inline_asset_content }}
+  {%- endif -%}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const filterToggle = document.getElementById('filterToggle');
+  const filterPanel = document.getElementById('filterPanel');
+  const filterIcon = filterToggle.querySelector('.filter-toggle__icon');
+  const productGrid = document.getElementById('product-grid');
+  const productCards = document.querySelectorAll('#product-grid .grid__item');
+  
+  // Store all products for client-side filtering
+  const allProducts = Array.from(productCards);
+  
+  // Initialize panel as visible but hidden
+  filterPanel.classList.remove('hide');
+  filterPanel.classList.add('show');
+  filterIcon.innerHTML = '−';
+  filterToggle.classList.add('active');
+  
+  // Show filter panel immediately
+  filterPanel.style.display = 'block';
+  
+  filterToggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Check if panel is currently visible
+    const isCurrentlyVisible = filterPanel.classList.contains('show');
+    
+    if (isCurrentlyVisible) {
+      // Hide the panel
+      filterPanel.classList.remove('show');
+      filterPanel.classList.add('hide');
+      filterIcon.innerHTML = '+';
+      filterToggle.classList.remove('active');
+      console.log('Filter panel closed');
+    } else {
+      // Show the panel
+      filterPanel.classList.remove('hide');
+      filterPanel.classList.add('show');
+      filterIcon.innerHTML = '−'; // Using minus symbol
+      filterToggle.classList.add('active');
+      console.log('Filter panel opened');
+    }
+  });
+  
+  // Client-side filtering function
+  function applyClientSideFilters() {
+    const checkboxes = document.querySelectorAll('.filter-option input[type="checkbox"]');
+    const checkedFilters = {};
+    
+    // Debug: Log all checkboxes to see their names and values
+    console.log('All filter checkboxes:');
+    checkboxes.forEach(checkbox => {
+      console.log(`Name: ${checkbox.name}, Value: ${checkbox.value}, Checked: ${checkbox.checked}`);
+    });
+    
+    // Collect all checked filters
+    checkboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+        const filterName = checkbox.name;
+        const filterValue = checkbox.value;
+        
+        if (!checkedFilters[filterName]) {
+          checkedFilters[filterName] = [];
+        }
+        checkedFilters[filterName].push(filterValue);
+      }
+    });
+    
+    console.log('Applied filters:', checkedFilters);
+    
+    // Debug: Log product data attributes
+    console.log('Product data attributes:');
+    allProducts.forEach((product, index) => {
+      console.log(`Product ${index}:`, {
+        id: product.dataset.productId,
+        type: product.dataset.productType,
+        vendor: product.dataset.productVendor,
+        tags: product.dataset.productTags,
+        availability: product.dataset.availability,
+        filterVAvailability: product.dataset.filterVAvailability,
+        price: product.dataset.price
+      });
+    });
+    
+    // Filter products based on checked filters
+    allProducts.forEach(product => {
+      let shouldShow = true;
+      
+      // Check each filter type
+      Object.keys(checkedFilters).forEach(filterType => {
+        const filterValues = checkedFilters[filterType];
+        const productValue = product.dataset[filterType] || '';
+        
+        // Handle availability filtering specifically
+        if (filterType === 'filter.v.availability') {
+          const productAvailability = product.dataset.filterVAvailability || product.dataset.availability || '';
+          const hasMatchingAvailability = filterValues.some(filterValue => {
+            // Handle different availability value formats
+            if (filterValue === '1' || filterValue === 'true') {
+              return productAvailability === '1' || productAvailability === 'in-stock';
+            } else if (filterValue === '0' || filterValue === 'false') {
+              return productAvailability === '0' || productAvailability === 'out-of-stock';
+            } else {
+              // Handle string values like 'in-stock', 'out-of-stock'
+              return productAvailability.toLowerCase() === filterValue.toLowerCase();
+            }
+          });
+          if (!hasMatchingAvailability) {
+            shouldShow = false;
+          }
+        }
+        // For multi-value filters (like tags), check if any match
+        else if (filterType === 'product-tags') {
+          const productTags = productValue.split(',').map(tag => tag.trim().toLowerCase());
+          const hasMatchingTag = filterValues.some(filterValue => 
+            productTags.includes(filterValue.toLowerCase())
+          );
+          if (!hasMatchingTag) {
+            shouldShow = false;
+          }
+        } else {
+          // For single value filters
+          const productValueLower = productValue.toLowerCase();
+          const hasMatchingValue = filterValues.some(filterValue => 
+            productValueLower.includes(filterValue.toLowerCase())
+          );
+          if (!hasMatchingValue) {
+            shouldShow = false;
+          }
+        }
+      });
+      
+      // Show/hide product based on filter results
+      if (shouldShow) {
+        product.classList.remove('filtered-out');
+        product.style.display = '';
+      } else {
+        product.classList.add('filtered-out');
+        product.style.display = 'none';
+      }
+    });
+    
+    // Update product count
+    updateProductCount();
+    
+    // Update URL without page reload
+    updateURL(checkedFilters);
+  }
+  
+  function updateProductCount() {
+    const visibleProducts = document.querySelectorAll('#product-grid .grid__item:not(.filtered-out)');
+    console.log(`Showing ${visibleProducts.length} of ${allProducts.length} products`);
+    
+    // Update any product count displays if they exist
+    const countDisplays = document.querySelectorAll('.product-count');
+    countDisplays.forEach(display => {
+      display.textContent = visibleProducts.length;
+    });
+    
+    // Show/hide empty state
+    const emptyState = document.querySelector('.collection--empty');
+    if (visibleProducts.length === 0) {
+      if (!emptyState) {
+        showEmptyState();
+      }
+    } else {
+      if (emptyState) {
+        emptyState.remove();
+      }
+    }
+  }
+  
+  function showEmptyState() {
+    const productGridContainer = document.getElementById('ProductGridContainer');
+    if (productGridContainer) {
+      const emptyState = document.createElement('div');
+      emptyState.className = 'collection collection--empty page-width';
+      emptyState.innerHTML = `
+        <div class="title-wrapper center">
+          <h2 class="title title--primary">
+            No products match your filters
+            <br>
+            <a href="${window.location.pathname}" class="underlined-link link">Clear all filters</a>
+          </h2>
+        </div>
+      `;
+      productGridContainer.appendChild(emptyState);
+    }
+  }
+  
+  function updateURL(filters) {
+    const params = new URLSearchParams();
+    
+    // Add current sort parameter if it exists
+    const sortBy = document.getElementById('SortBy');
+    if (sortBy && sortBy.value) {
+      params.set('sort_by', sortBy.value);
+    }
+    
+    // Add filter parameters
+    Object.keys(filters).forEach(filterName => {
+      filters[filterName].forEach(value => {
+        params.append(filterName, value);
+      });
+    });
+    
+    // Update browser URL without reload
+    const baseUrl = window.location.pathname;
+    const queryString = params.toString();
+    const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
+    window.history.replaceState({}, '', fullUrl);
+  }
+  
+  // Handle checkbox changes for filtering
+  const checkboxes = document.querySelectorAll('.filter-option input[type="checkbox"]');
+  
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      console.log(`Filter changed: ${this.name} = ${this.value}, checked: ${this.checked}`);
+      
+      // Apply filters immediately
+      applyClientSideFilters();
+      
+      // Keep the filter panel open during filtering
+      const filterPanel = document.getElementById('filterPanel');
+      if (!filterPanel.classList.contains('show')) {
+        filterPanel.classList.remove('hide');
+        filterPanel.classList.add('show');
+        const filterIcon = document.querySelector('.filter-toggle__icon');
+        if (filterIcon) {
+          filterIcon.innerHTML = '−';
+        }
+        document.getElementById('filterToggle').classList.add('active');
+      }
+    });
+  });
+  
+  // Handle sort dropdown changes
+  const sortDropdown = document.getElementById('SortBy');
+  if (sortDropdown) {
+    sortDropdown.addEventListener('change', function() {
+      // For sorting, we'll use the server-side approach since it affects pagination
+      const params = new URLSearchParams();
+      params.set('sort_by', this.value);
+      
+      // Add current filter parameters
+      const checkboxes = document.querySelectorAll('.filter-option input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          params.append(checkbox.name, checkbox.value);
+        }
+      });
+      
+      // Redirect to sorted/filtered URL
+      const baseUrl = window.location.pathname;
+      const queryString = params.toString();
+      const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
+      window.location.href = fullUrl;
+    });
+  }
+  
+  // Initialize filters based on URL parameters
+  function initializeFiltersFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Set checkboxes based on URL parameters
+    checkboxes.forEach(checkbox => {
+      const paramValues = urlParams.getAll(checkbox.name);
+      if (paramValues.includes(checkbox.value)) {
+        checkbox.checked = true;
+      } else {
+        checkbox.checked = false;
+      }
+    });
+    
+    // Apply filters if any are checked
+    const hasCheckedFilters = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    if (hasCheckedFilters) {
+      applyClientSideFilters();
+    }
+  }
+  
+  // Initialize filters on page load
+  initializeFiltersFromURL();
+  
+  // Add clear all filters functionality
+  function addClearFiltersButton() {
+    const filterPanel = document.getElementById('filterPanel');
+    const filterContent = filterPanel.querySelector('.filter-panel__content');
+    
+    // Check if clear button already exists
+    if (!document.getElementById('clearFiltersBtn')) {
+      const clearButton = document.createElement('button');
+      clearButton.id = 'clearFiltersBtn';
+      clearButton.className = 'clear-filters-btn';
+      clearButton.textContent = 'Clear All Filters';
+      clearButton.style.cssText = `
+        background: #333;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 20px;
+        transition: background 0.3s ease;
+      `;
+      
+      clearButton.addEventListener('click', function() {
+        // Uncheck all checkboxes
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        
+        // Show all products
+        allProducts.forEach(product => {
+          product.classList.remove('filtered-out');
+          product.style.display = '';
+        });
+        
+        // Update URL
+        window.history.replaceState({}, '', window.location.pathname);
+        
+        // Update count
+        updateProductCount();
+        
+        console.log('All filters cleared');
+      });
+      
+      filterContent.appendChild(clearButton);
+    }
+  }
+  
+  // Add clear filters button
+  addClearFiltersButton();
+});
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.main-collection-product-grid.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "default": 16,
+      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "t:sections.main-collection-product-grid.settings.columns_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
+        }
+      ]
+    },    
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "info": "t:sections.all.colors.has_cards_info",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__3.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.main-collection-product-grid.settings.image_ratio.label"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.all.image_shape.options__1.label"
+        },
+        {
+          "value": "arch",
+          "label": "t:sections.all.image_shape.options__2.label"
+        },
+        {
+          "value": "blob",
+          "label": "t:sections.all.image_shape.options__3.label"
+        },
+        {
+          "value": "chevronleft",
+          "label": "t:sections.all.image_shape.options__4.label"
+        },
+        {
+          "value": "chevronright",
+          "label": "t:sections.all.image_shape.options__5.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:sections.all.image_shape.options__6.label"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:sections.all.image_shape.options__7.label"
+        },
+        {
+          "value": "round",
+          "label": "t:sections.all.image_shape.options__8.label"
+        }
+      ],
+      "default": "default",
+      "label": "t:sections.all.image_shape.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_rating.label",
+      "info": "t:sections.main-collection-product-grid.settings.show_rating.info"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "none",
+      "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_1"
+        },
+        {
+          "value": "standard",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_2"
+        },
+        {
+          "value": "bulk",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
+      "info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
+    },
+    {
+      "type": "select",
+      "id": "filter_type",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__1.label"
+        },
+        {
+          "value": "vertical",
+          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__2.label"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__3.label"
+        }
+      ],
+      "default": "horizontal",
+      "label": "t:sections.main-collection-product-grid.settings.filter_type.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

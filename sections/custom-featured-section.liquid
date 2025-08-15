@@ -1,0 +1,763 @@
+{% comment %} 
+  - Only show a single "Add to Cart" button per product card (no quick add, no mobile/hover variants).
+  - Use Shopify's AJAX cart API to add to cart (no page reload).
+  - Make product card smaller on mobile, using Material 3 card guidelines (e.g. 8px radius, 12px padding, 12px gap, 14px font, 80-120px image, etc).
+  - Remove all quick-add/hover/mobile forms and buttons.
+  - Clean up CSS for card and button to match Material 3 (m3.material.io) as much as possible.
+{% endcomment %}
+<style>
+  .new-arrivals-section {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 4rem 0;
+  }
+
+  .new-arrivals-section--text-left {
+    grid-template-columns: 1fr 3fr;
+  }
+  .new-arrivals-section--text-left .new-arrivals-text { order: 1; }
+  .new-arrivals-section--text-left .new-arrivals-slider { order: 2; }
+  .new-arrivals-section--text-right .new-arrivals-text { order: 2; }
+  .new-arrivals-section--text-right .new-arrivals-slider { order: 1; }
+
+  .new-arrivals-slider {
+    width: 100%;
+    position: relative;
+    padding: 0 20px;
+  }
+  .slider-component { 
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0,0,0,0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    font-size: 2rem;
+    color: #666;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+    min-width: 40px;
+    min-height: 40px;
+    backdrop-filter: blur(8px);
+  }
+  .slider-arrow:hover {
+    color: #000;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+  .slider-arrow--left { left: 10px; }
+  .slider-arrow--right { right: 10px; }
+  .slider-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    gap: 1.5rem;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slider-container::-webkit-scrollbar { display: none; }
+  .slider-item {
+    flex: 0 0 calc(33.33% - 1rem);
+    max-width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .new-arrivals-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 2rem;
+    height: 100%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(60,60,60,0.08), 0 0.5px 1.5px rgba(60,60,60,0.04);
+    
+  }
+  .new-arrivals-text h1 {
+    font-size: 32px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    color: #000;
+    font-weight: 900;
+    margin: 0 0 1.2rem 0;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+  .new-arrivals-text p {
+    font-size: 20px;
+    color: #222;
+    margin: 0 0 2.1rem 0;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 400;
+  }
+  .view-collection-btn {
+    font-size: 1.2rem;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 900;
+    color: #000;
+    text-transform: uppercase;
+    text-decoration: underline;
+    letter-spacing: 0.04em;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+    display: inline-block;
+  }
+  .view-collection-btn:hover {
+    color: #e91e63;
+    text-decoration: underline;
+  }
+  .new-arrivals-fallback {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #888;
+    font-size: 1.2rem;
+    padding: 3rem 0;
+  }
+
+  /* Material 3 Product Card Styles */
+  .product-card-container {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(60,60,60,0.08), 0 0.5px 1.5px rgba(60,60,60,0.04);
+    padding: 16px 16px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    height: 100%;
+  }
+  .product-card-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #f9f9f9;
+    aspect-ratio: 1;
+    width: 100%;
+    min-height: 120px;
+    max-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-card-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .product-card-image-link:hover {
+    color: #e91e63;
+  }
+
+  .product-card-image-link:hover ~ .product-card-info .product-card-title,
+  .product-card-image-link:hover ~ .product-card-info .product-card-title a,
+  .product-card-image-link:hover ~ .product-card-info .product-card-price {
+    color: #e91e63;
+  }
+
+  .product-card-image-link:focus {
+    outline: 2px solid rgba(0,0,0,0.3);
+    outline-offset: 2px;
+  }
+
+  .product-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f3f3f3;
+  }
+  .product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #e91e63;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    box-shadow: 0 1px 4px rgba(60,60,60,0.10);
+  }
+  .product-card-info {
+    padding: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+  .product-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 2px 0;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    /* Constrain title height to 2 lines max */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.6em; /* Ensure consistent height even for short titles */
+  }
+  .product-card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .product-card-title a:hover {
+    color: #e91e63;
+  }
+  .product-card-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .product-card-price--compare {
+    color: #999;
+    text-decoration: line-through;
+    font-weight: normal;
+    margin-right: 4px;
+    font-size: 15px;
+  }
+  .product-card-price--sale {
+    color: #e91e63;
+  }
+
+  /* Shop by Category Style Add to Cart Button */
+  .add-to-cart-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 40px;
+    padding: 0.75rem 1.5rem;
+    margin-top: 8px;
+    background: transparent;
+    color: #000;
+    border: 2px solid #000;
+    border-radius: 30px;
+    font-size: 14px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    gap: 8px;
+  }
+
+  .add-to-cart-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
+    z-index: 1;
+  }
+
+  .add-to-cart-btn:hover::before {
+    left: 100%;
+  }
+
+  .add-to-cart-btn span {
+    position: relative;
+    z-index: 2;
+  }
+  .add-to-cart-btn:hover {
+    background: #000;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+  .add-to-cart-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .add-to-cart-btn:disabled {
+    background: transparent;
+    color: #9e9e9e;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+  .add-to-cart-btn:disabled:hover {
+    background: transparent;
+    color: #9e9e9e;
+    border-color: #e0e0e0;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Content grouping for better alignment */
+  .product-card-content-top {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .product-card-content-bottom {
+    margin-top: auto;
+  }
+
+  /* Loading and Error States */
+  .add-to-cart-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .add-to-cart-btn .loading__spinner {
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+  }
+  .add-to-cart-btn .loading__spinner.hidden {
+    display: none;
+  }
+  .product-form__error-message-wrapper {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background: #fee;
+    border: 1px solid #fcc;
+    border-radius: 4px;
+    color: #c33;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .product-form__error-message-wrapper .svg-wrapper {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+  .product-form__error-message-wrapper[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .new-arrivals-section,
+    .new-arrivals-section--text-left,
+    .new-arrivals-section--text-right {
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+      padding: 1.2rem 0;
+    }
+    .new-arrivals-text {
+      padding: 2rem 1.5rem;
+      order: 1 !important;
+      margin: 0 0.5rem 1.5rem 0.5rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(60,60,60,0.08), 0 0.5px 1.5px rgba(60,60,60,0.04);
+    }
+    .new-arrivals-text h1 {
+      font-size: 20px;
+      margin-bottom: 0.5rem;
+    }
+    .new-arrivals-text p {
+      font-size: 14px;
+      margin-bottom: 1rem;
+    }
+    .new-arrivals-slider {
+      order: 2 !important;
+      padding: 0 10px;
+      margin: 0 -0.5rem;
+    }
+    .slider-container {
+      padding: 0 0.5rem;
+      gap: 0.7rem;
+    }
+    .slider-item {
+      flex: 0 0 80vw;
+      padding: 0;
+      min-width: 280px;
+      max-width: 80vw;
+      scroll-snap-align: center;
+    }
+    .slider-arrow { display: none; }
+    .product-card-container {
+      margin: 0;
+      padding: 16px 12px 18px 12px;
+      border-radius: 12px;
+      min-width: 0;
+      width: 100%;
+      box-shadow: 0 1px 4px rgba(60,60,60,0.08);
+      gap: 12px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .product-card-image {
+      min-height: 200px;
+      max-height: 280px;
+      border-radius: 8px;
+      aspect-ratio: 1;
+    }
+    .product-card-image img {
+      border-radius: 8px;
+    }
+    .product-card-title {
+      font-size: 16px;
+      margin-bottom: 0;
+      line-height: 1.3;
+    }
+    .product-card-info {
+      gap: 8px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+    .product-card-price {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    .add-to-cart-btn {
+      min-height: 40px;
+      font-size: 14px;
+      border-radius: 20px;
+      margin-top: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 700;
+    }
+    .add-to-cart-btn:hover {
+      background: #000;
+      color: #fff;
+      transform: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+  }
+</style>
+
+<div class="new-arrivals-section page-width{% if section.settings.text_position == 'left' %} new-arrivals-section--text-left{% else %} new-arrivals-section--text-right{% endif %}">
+  {%- assign featured_collection = collections[section.settings.collection] -%}
+  {%- if featured_collection and featured_collection.products.size > 0 -%}
+    <!-- Column 1: The Slider (3/4 width) -->
+    <div class="new-arrivals-slider slider-component">
+      <button class="slider-arrow slider-arrow--left" aria-label="Scroll left" type="button">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <ul class="slider-container">
+        {%- for product in featured_collection.products -%}
+          <li class="slider-item">
+            <div class="product-card-container">
+              {%- if product.featured_media -%}
+                <div class="product-card-image">
+                  <a href="{{ product.url }}" class="product-card-image-link" aria-label="{{ product.title | escape }}">
+                    <img
+                      srcset="
+                        {%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                        {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                        {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+                      "
+                      src="{{ product.featured_media | image_url: width: 533 }}"
+                      sizes="(min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                      alt="{{ product.featured_media.alt | escape }}"
+                      loading="lazy"
+                      width="{{ product.featured_media.width }}"
+                      height="{{ product.featured_media.height }}"
+                    >
+                  </a>
+                  {%- if product.available == false -%}
+                    <span class="product-badge">
+                      {{- 'products.product.sold_out' | t -}}
+                    </span>
+                  {%- elsif product.compare_at_price > product.price and product.available -%}
+                    <span class="product-badge">
+                      {{- 'products.product.on_sale' | t -}}
+                    </span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              <div class="product-card-info">
+                <div class="product-card-content-top">
+                  <h3 class="product-card-title">
+                    <a href="{{ product.url }}">
+                      {{ product.title | escape }}
+                    </a>
+                  </h3>
+                </div>
+
+                <div class="product-card-content-bottom">
+                  <div class="product-card-price">
+                    {%- if product.compare_at_price > product.price and product.available -%}
+                      <span class="product-card-price--compare">
+                        {{ product.compare_at_price | money }}
+                      </span>
+                      <span class="product-card-price--sale">
+                        {{ product.price | money }}
+                      </span>
+                    {%- else -%}
+                      {{ product.price | money }}
+                    {%- endif -%}
+                  </div>
+                  <product-form class="product-form" data-section-id="{{ section.id }}">
+                    <div class="product-form__error-message-wrapper" role="alert" hidden>
+                      <span class="svg-wrapper">
+                        {{- 'icon-error.svg' | inline_asset_content -}}
+                      </span>
+                      <span class="product-form__error-message"></span>
+                    </div>
+                    <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="form" novalidate="novalidate" data-type="add-to-cart-form">
+                      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" class="product-variant-id" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+                      <button
+                        type="submit"
+                        name="add"
+                        class="add-to-cart-btn"
+                        {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+                        aria-label="{% if product.selected_or_first_available_variant.available %}Add {{ product.title | escape }} to cart{% else %}Sold Out{% endif %}"
+                      >
+                        <span>
+                          {% if product.selected_or_first_available_variant.available %}
+                            Add to Cart
+                          {% else %}
+                            Sold Out
+                          {% endif %}
+                        </span>
+                        {%- render 'loading-spinner' -%}
+                      </button>
+                    </form>
+                  </product-form>
+                </div>
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+      <button class="slider-arrow slider-arrow--right" aria-label="Scroll right" type="button">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Column 2: The Text Content (1/4 width, centered) -->
+    <div class="new-arrivals-text">
+      <h1>{{ section.settings.heading }}</h1>
+      <p>{{ section.settings.subheading }}</p>
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="view-collection-btn">{{ section.settings.button_text }}</a>
+      {% endif %}
+    </div>
+  {%- else -%}
+    <div class="new-arrivals-fallback">Please select a collection with products in the section settings.</div>
+  {%- endif -%}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Slider functionality - scope to this specific section
+    const sectionContainer = document.querySelector('#shopify-section-{{ section.id }}');
+    if (!sectionContainer) return;
+    
+    const sliderContainer = sectionContainer.querySelector('.slider-container');
+    const leftArrow = sectionContainer.querySelector('.slider-arrow--left');
+    const rightArrow = sectionContainer.querySelector('.slider-arrow--right');
+    const slides = sectionContainer.querySelectorAll('.slider-item');
+
+    if (leftArrow && rightArrow && sliderContainer) {
+      leftArrow.addEventListener('click', function() {
+        sliderContainer.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+      rightArrow.addEventListener('click', function() {
+        sliderContainer.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    }
+
+    // Mobile touch slider functionality
+    if (sliderContainer) {
+      let touchStartX = 0;
+      let touchEndX = 0;
+      sliderContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, false);
+      sliderContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        // Handle swipe gestures
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            // Swiped left - scroll right
+            sliderContainer.scrollBy({ left: 300, behavior: 'smooth' });
+          } else {
+            // Swiped right - scroll left
+            sliderContainer.scrollBy({ left: -300, behavior: 'smooth' });
+          }
+        }
+      }, false);
+    }
+
+    // Product form handling - uses Shopify's built-in cart functionality
+    // The forms will automatically handle add to cart via Shopify's product-form web component
+  });
+</script>
+
+{%- comment -%} Load product form JavaScript for cart functionality {%- endcomment -%}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "New Arrivals Quick View",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "NEW ARRIVALS"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Get it here before anywhere else.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop All"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection to display"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "right",
+      "label": "Text position",
+      "info": "Choose whether to display the text content on the left or right side"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "square",
+      "label": "Image ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show rating"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "background-1",
+      "label": "Color scheme"
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Arrivals Quick View"
+    }
+  ]
+}
+{% endschema %}

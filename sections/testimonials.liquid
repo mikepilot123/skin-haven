@@ -1,0 +1,898 @@
+<style>
+  .testimonials {
+    position: relative;
+    width: 100vw;
+    padding: 0;
+    margin: 0;
+    margin-left: calc(-50vw + 50%);
+    box-sizing: border-box;
+    background: #fff;
+  }
+
+  .testimonials__header {
+    text-align: center;
+    width: 100%;
+    background: #fff;
+  }
+
+  .testimonials__title {
+    font: normal normal 700 34px / 44px 'Nunito Sans', Arial, sans-serif;
+    letter-spacing: 2.72px;
+    margin-bottom: 40px;
+    margin-top: 30px;
+    color: #000;
+    text-transform: uppercase;
+  }
+
+  .testimonials__wrapper {
+    position: relative;
+    width: 100%;
+    cursor: grab;
+    overflow: hidden;
+    user-select: none;
+    background: #fff;
+  }
+
+  .testimonials__wrapper:active {
+    cursor: grabbing;
+  }
+
+  .testimonials__container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    min-height: 600px;
+    width: 100%;
+    margin: 0;
+    gap: 0;
+    background: #fff;
+    padding: 0 3rem;
+  }
+
+  .testimonials__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border: 2px solid #000;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .testimonials__nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s;
+  }
+
+  .testimonials__nav:hover {
+    background: #000;
+    border: 3px solid #000;
+    transform: scale(1.05);
+  }
+
+  .testimonials__nav:hover::before {
+    left: 100%;
+  }
+
+  .testimonials__nav:hover svg {
+    fill: #fff;
+  }
+
+  .testimonials__nav svg {
+    width: 16px;
+    height: 16px;
+    fill: #000;
+    transition: fill 0.3s ease;
+  }
+
+  .testimonials__nav--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .testimonials__nav--disabled:hover {
+    transform: none;
+    background: transparent;
+    border: 2px solid #000;
+  }
+
+  .testimonials__nav--disabled:hover svg {
+    fill: #000;
+  }
+
+  .testimonials__slides {
+    grid-column: 2;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1600px;
+    height: 600px;
+    background: #fff;
+    margin: 0 auto;
+    justify-self: center;
+  }
+
+  .testimonials__slides-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .testimonials__slide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    background: #fff;
+    justify-items: center;
+  }
+
+  .testimonials__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem;
+    background: #fff;
+    margin: 1rem;
+    max-width: 550px;
+  }
+
+  .testimonials__stars {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .testimonials__star {
+    width: 35px;
+    height: 35px;
+    fill: #ff6b6b;
+  }
+
+  .testimonials__quote {
+    font: normal normal 400 22px/32px 'Nunito Sans', Arial, sans-serif;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.5;
+  }
+
+  .testimonials__author {
+    font: normal normal 600 18px/24px 'Nunito Sans', Arial, sans-serif;
+    color: #333;
+    margin-bottom: 32px;
+  }
+
+  .testimonials__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: #000;
+    border: 2px solid #000;
+    border-radius: 30px;
+    font-size: 14px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    gap: 8px;
+  }
+
+  .testimonials__button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
+    z-index: 1;
+  }
+
+  .testimonials__button:hover::before {
+    left: 100%;
+  }
+
+  .testimonials__button span {
+    position: relative;
+    z-index: 2;
+  }
+
+  .testimonials__button:hover {
+    background: #000;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+
+  .testimonials__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: #fff;
+    padding: 1rem;
+  }
+
+  .testimonials__image img {
+    display: block;
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+    background: #fff;
+  }
+
+  .testimonials__image img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.06);
+  }
+
+  .testimonials__indicators {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .testimonials__indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ddd;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .testimonials__indicator.active {
+    background: #000;
+    transform: scale(1.2);
+  }
+
+  @media screen and (max-width: 900px) {
+    .testimonials__container {
+      grid-template-columns: 50px 1fr 50px;
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+
+    .testimonials__nav {
+      width: 45px;
+      height: 45px;
+      border: 2px solid #000;
+    }
+
+    .testimonials__nav svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .testimonials__slides {
+      grid-column: 2;
+      height: auto;
+      min-height: 500px;
+    }
+
+    .testimonials__slide {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .testimonials__image {
+      order: 1;
+      min-height: 300px;
+    }
+
+    .testimonials__content {
+      order: 2;
+      text-align: center;
+      align-items: center;
+      padding: 2rem;
+      margin: 0.75rem;
+    }
+
+    .testimonials__title {
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 40px;
+      margin-top: 30px;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .testimonials__container {
+      grid-template-columns: 1fr;
+      position: relative;
+    }
+
+    .testimonials__nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: 40px;
+      height: 40px;
+    }
+
+    .testimonials__nav--prev {
+      left: 10px;
+    }
+
+    .testimonials__nav--next {
+      right: 10px;
+    }
+
+    .testimonials__slide {
+      gap: 1.5rem;
+      padding: 0 60px;
+    }
+
+    .testimonials__content {
+      padding: 1rem;
+      margin: 0.25rem;
+    }
+
+    .testimonials__image {
+      min-height: 250px;
+    }
+
+    .testimonials__image img {
+      max-width: 280px;
+      max-height: 280px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .testimonials__title {
+      font-size: 20px;
+      line-height: 28px;
+      letter-spacing: 1.5px;
+      margin-bottom: 30px;
+      margin-top: 20px;
+    }
+
+    .testimonials__quote {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .testimonials__slide {
+      padding: 0 50px;
+    }
+
+    .testimonials__nav {
+      width: 38px;
+      height: 38px;
+    }
+
+    .testimonials__nav svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .testimonials__image img {
+      max-width: 220px;
+      max-height: 220px;
+    }
+
+    .testimonials__content {
+      padding: 1rem 0.75rem;
+    }
+
+    .testimonials__button {
+      font-size: 14px;
+      padding: 0.8rem 1.6rem;
+      min-height: 44px;
+    }
+  }
+</style>
+
+<div class="testimonials">
+  {% if section.settings.title != blank %}
+    <div class="testimonials__header">
+      <h2 class="testimonials__title">{{ section.settings.title }}</h2>
+    </div>
+  {% endif %}
+
+  <div class="testimonials__wrapper" data-slider>
+    <div class="testimonials__container">
+      <button class="testimonials__nav testimonials__nav--prev" data-prev aria-label="Previous testimonial">
+        <svg viewBox="0 0 24 24">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
+      </button>
+
+      <div class="testimonials__slides">
+        <div class="testimonials__slides-container" data-slides-container>
+          {% for block in section.blocks %}
+            <div class="testimonials__slide" data-slide="{{ forloop.index0 }}">
+              <div class="testimonials__content">
+                {% if section.settings.show_stars %}
+                  <div class="testimonials__stars">
+                    {% for i in (1..5) %}
+                      <svg class="testimonials__star" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if block.settings.quote != blank %}
+                  <div class="testimonials__quote">"{{ block.settings.quote }}"</div>
+                {% endif %}
+
+                {% if block.settings.author != blank %}
+                  <div class="testimonials__author">- {{ block.settings.author }}</div>
+                {% endif %}
+
+                {% if block.settings.featured_product != blank or block.settings.button_text != blank %}
+                  {% assign button_url = '' %}
+                  {% assign button_text = 'VIEW PRODUCT' %}
+                  
+                  {% if block.settings.featured_product != blank %}
+                    {% assign button_url = block.settings.featured_product.url %}
+                  {% elsif block.settings.button_link != blank %}
+                    {% assign button_url = block.settings.button_link %}
+                    {% if block.settings.button_text != blank %}
+                      {% assign button_text = block.settings.button_text %}
+                    {% endif %}
+                  {% endif %}
+                  
+                  <a 
+                    {% if button_url != blank %}
+                      href="{{ button_url }}"
+                    {% endif %}
+                    class="testimonials__button"
+                  >
+                    {{ button_text }}
+                  </a>
+                {% endif %}
+              </div>
+
+              <div class="testimonials__image">
+                {% assign product_url = '' %}
+                {% if block.settings.featured_product != blank %}
+                  {% assign product_url = block.settings.featured_product.url %}
+                {% elsif block.settings.image_link != blank %}
+                  {% assign product_url = block.settings.image_link %}
+                {% endif %}
+
+                {% if block.settings.featured_product != blank and block.settings.featured_product.featured_media %}
+                  {% if product_url != blank %}
+                    <a href="{{ product_url }}">
+                  {% endif %}
+                  
+                  <img 
+                    srcset="
+                      {{ block.settings.featured_product.featured_media | image_url: width: 300 }} 300w,
+                      {{ block.settings.featured_product.featured_media | image_url: width: 400 }} 400w,
+                      {{ block.settings.featured_product.featured_media | image_url: width: 600 }} 600w,
+                      {{ block.settings.featured_product.featured_media | image_url: width: 800 }} 800w
+                    "
+                    sizes="(min-width: 900px) 350px, (min-width: 500px) 50vw, 90vw"
+                    src="{{ block.settings.featured_product.featured_media | image_url: width: 400 }}" 
+                    alt="{{ block.settings.featured_product.title | escape }}" 
+                    loading="lazy"
+                    width="450"
+                    height="450"
+                  >
+                  
+                  {% if product_url != blank %}
+                    </a>
+                  {% endif %}
+                {% elsif block.settings.testimonial_image != blank %}
+                  {% if product_url != blank %}
+                    <a href="{{ product_url }}">
+                  {% endif %}
+                  
+                  <img 
+                    srcset="
+                      {{ block.settings.testimonial_image | image_url: width: 300 }} 300w,
+                      {{ block.settings.testimonial_image | image_url: width: 400 }} 400w,
+                      {{ block.settings.testimonial_image | image_url: width: 600 }} 600w,
+                      {{ block.settings.testimonial_image | image_url: width: 800 }} 800w
+                    "
+                    sizes="(min-width: 900px) 350px, (min-width: 500px) 50vw, 90vw"
+                    src="{{ block.settings.testimonial_image | image_url: width: 400 }}" 
+                    alt="{{ block.settings.author | default: 'Customer testimonial' | escape }}" 
+                    loading="lazy"
+                    width="450"
+                    height="450"
+                  >
+                  
+                  {% if product_url != blank %}
+                    </a>
+                  {% endif %}
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button class="testimonials__nav testimonials__nav--next" data-next aria-label="Next testimonial">
+        <svg viewBox="0 0 24 24">
+          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+        </svg>
+      </button>
+    </div>
+
+    {% if section.blocks.size > 1 %}
+      <div class="testimonials__indicators">
+        {% for block in section.blocks %}
+          <button class="testimonials__indicator{% if forloop.first %} active{% endif %}" data-indicator="{{ forloop.index0 }}"></button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const slider = document.querySelector('[data-slider]');
+  if (!slider) return;
+  
+  const slidesContainer = slider.querySelector('[data-slides-container]');
+  const slides = slider.querySelectorAll('[data-slide]');
+  const prevBtn = slider.querySelector('[data-prev]');
+  const nextBtn = slider.querySelector('[data-next]');
+  const indicators = slider.querySelectorAll('[data-indicator]');
+  
+  let currentSlide = 0;
+  let isAnimating = false;
+  
+  function updateNavigation() {
+    if (prevBtn) {
+      if (currentSlide === 0) {
+        prevBtn.classList.add('testimonials__nav--disabled');
+        prevBtn.setAttribute('aria-disabled', 'true');
+      } else {
+        prevBtn.classList.remove('testimonials__nav--disabled');
+        prevBtn.setAttribute('aria-disabled', 'false');
+      }
+    }
+    if (nextBtn) {
+      if (currentSlide === slides.length - 1) {
+        nextBtn.classList.add('testimonials__nav--disabled');
+        nextBtn.setAttribute('aria-disabled', 'true');
+      } else {
+        nextBtn.classList.remove('testimonials__nav--disabled');
+        nextBtn.setAttribute('aria-disabled', 'false');
+      }
+    }
+  }
+  
+  function updateIndicators() {
+    indicators.forEach((indicator, index) => {
+      if (index === currentSlide) {
+        indicator.classList.add('active');
+      } else {
+        indicator.classList.remove('active');
+      }
+    });
+  }
+  
+  function slideToIndex(index) {
+    if (isAnimating || index < 0 || index >= slides.length || index === currentSlide) {
+      return;
+    }
+    isAnimating = true;
+    currentSlide = index;
+    
+    const translateX = -currentSlide * 100;
+    slidesContainer.style.transform = `translateX(${translateX}%)`;
+    
+    updateNavigation();
+    updateIndicators();
+    
+    setTimeout(() => {
+      isAnimating = false;
+    }, 500);
+  }
+  
+  function nextSlide() {
+    if (currentSlide < slides.length - 1) {
+      slideToIndex(currentSlide + 1);
+    }
+  }
+  
+  function prevSlide() {
+    if (currentSlide > 0) {
+      slideToIndex(currentSlide - 1);
+    }
+  }
+  
+  function goToSlide(index) {
+    slideToIndex(index);
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!nextBtn.classList.contains('testimonials__nav--disabled')) {
+        nextSlide();
+      }
+    });
+  }
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!prevBtn.classList.contains('testimonials__nav--disabled')) {
+        prevSlide();
+      }
+    });
+  }
+  
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', function(e) {
+      e.preventDefault();
+      goToSlide(index);
+    });
+  });
+  
+  let startX = 0;
+  let startY = 0;
+  let isDragging = false;
+  let dragStartTime = 0;
+  
+  slider.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    isDragging = true;
+    dragStartTime = Date.now();
+    slider.style.cursor = 'grabbing';
+  }, { passive: true });
+  
+  slider.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = Math.abs(currentX - startX);
+    const diffY = Math.abs(currentY - startY);
+    
+    if (diffX > diffY && diffX > 10) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+  
+  slider.addEventListener('touchend', (e) => {
+    if (!isDragging) return;
+    
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = startX - endX;
+    const diffY = Math.abs(startY - endY);
+    const dragDuration = Date.now() - dragStartTime;
+    
+    if (Math.abs(diffX) > diffY && Math.abs(diffX) > 50 && dragDuration > 100 && dragDuration < 2000) {
+      if (diffX > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    
+    isDragging = false;
+    slider.style.cursor = 'grab';
+  }, { passive: true });
+  
+  let mouseStartX = 0;
+  let mouseStartY = 0;
+  let isMouseDragging = false;
+  let mouseDragStartTime = 0;
+  
+  slider.addEventListener('mousedown', (e) => {
+    mouseStartX = e.clientX;
+    mouseStartY = e.clientY;
+    isMouseDragging = true;
+    mouseDragStartTime = Date.now();
+    slider.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+  
+  slider.addEventListener('mousemove', (e) => {
+    if (!isMouseDragging) return;
+    
+    const diffX = Math.abs(e.clientX - mouseStartX);
+    const diffY = Math.abs(e.clientY - mouseStartY);
+    
+    if (diffX > diffY && diffX > 5) {
+      e.preventDefault();
+    }
+  });
+  
+  slider.addEventListener('mouseup', (e) => {
+    if (!isMouseDragging) return;
+    
+    const endX = e.clientX;
+    const endY = e.clientY;
+    const diffX = mouseStartX - endX;
+    const diffY = Math.abs(mouseStartY - endY);
+    const dragDuration = Date.now() - mouseDragStartTime;
+    
+    if (Math.abs(diffX) > diffY && Math.abs(diffX) > 50 && dragDuration > 100 && dragDuration < 2000) {
+      if (diffX > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    
+    isMouseDragging = false;
+    slider.style.cursor = 'grab';
+  });
+  
+  slider.addEventListener('mouseleave', () => {
+    isMouseDragging = false;
+    slider.style.cursor = 'grab';
+  });
+  
+  slider.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      nextSlide();
+    }
+  });
+  
+  updateNavigation();
+  updateIndicators();
+});
+</script>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "WHAT OUR CUSTOMERS SAY"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stars",
+      "label": "Show Star Rating",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Customer Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Customer Quote",
+          "default": "Amazing product and outstanding customer service! The quality exceeded my expectations and I couldn't be happier with my purchase."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Customer Name",
+          "default": "Sarah Johnson"
+        },
+        {
+          "type": "header",
+          "content": "Product Settings"
+        },
+        {
+          "type": "product",
+          "id": "featured_product",
+          "label": "Featured Product",
+          "info": "Select a product to automatically use its image and link. This will override custom image and link settings below."
+        },
+        {
+          "type": "header",
+          "content": "Custom Image Settings (Optional)"
+        },
+        {
+          "type": "paragraph",
+          "content": "Use these settings only if you want to override the selected product's image or if no product is selected above."
+        },
+        {
+          "type": "image_picker",
+          "id": "testimonial_image",
+          "label": "Custom Testimonial Image",
+          "info": "Only used if no product is selected above"
+        },
+        {
+          "type": "url",
+          "id": "image_link",
+          "label": "Custom Image Link",
+          "info": "Only used if no product is selected above"
+        },
+        {
+          "type": "header",
+          "content": "Button Settings"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Custom Button Text (Optional)",
+          "info": "Leave blank to auto-generate button text like 'SHOP THIS RING' based on selected product. Only used if no product is selected above."
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Custom Button Link",
+          "info": "Only used if no product is selected above. If a product is selected, the button will automatically link to that product."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Excellent service and fantastic products. The team went above and beyond to help me find exactly what I was looking for.",
+            "author": "Michael Chen"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Love everything about this company! Fast shipping, beautiful packaging, and the product quality is incredible.",
+            "author": "Emma Rodriguez"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 

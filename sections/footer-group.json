@@ -1,0 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "custom_footer": {
+      "type": "custom-footer",
+      "settings": {
+        "logo": "",
+        "brand_name": "rse",
+        "brand_tagline": "GLASS SKIN EFFECT",
+        "treatments_title": "TREATMENTS",
+        "skin_care_link": "/collections/skin-care",
+        "body_care_link": "/collections/body-care",
+        "nails_link": "/collections/nails",
+        "appliances_link": "/collections/appliances",
+        "quick_links_title": "QUICK LINKS",
+        "about_link": "/pages/about",
+        "contact_link": "/pages/contact",
+        "blog_link": "/blogs/news",
+        "faq_link": "/pages/faq",
+        "privacy_link": "/policies/privacy-policy",
+        "terms_link": "/policies/terms-of-service",
+        "address_title": "ADDRESS",
+        "address_line_1": "77 Beak St",
+        "address_line_2": "Soho London W1F 9DB",
+        "phone_number": "020 1234 6789",
+        "email_address": "info@glassskineffect.com",
+        "copyright_text": "Glass Skin Effect 2023. All rights reserved."
+      }
+    }
+  },
+  "order": [
+    "custom_footer"
+  ]
+}

@@ -1,0 +1,164 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        },
+        "cross_sell": {
+          "type": "cross_sell",
+          "settings": {
+            "heading": "Complete Your Look",
+            "subheading": "Perfect products to enhance your skincare routine",
+            "collection": "",
+            "products_to_show": 3,
+            "show_vendor": true,
+            "show_sale_badge": true
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "cross_sell",
+        "description",
+        "share"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "large",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "stacked",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "product-tabs": {
+      "type": "product-tabs",
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "badge_text": "CRUELTY FREE",
+            "badge_icon": "cruelty-free"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "badge_text": "VEGAN",
+            "badge_icon": "vegan"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "badge_text": "MADE IN ITALY",
+            "badge_icon": "made-in"
+          }
+        }
+      },
+      "block_order": [
+        "badge-1",
+        "badge-2",
+        "badge-3"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "tab_1_title": "WHY YOU'LL LOVE IT",
+        "tab_1_content": "<p>When it comes to bronzer, we're all about baked. Milani Baked Bronzer gives skin natural warmth with a touch of soft shimmer. Like sister products Milani Baked Blush and Baked Highlighter, Baked Bronzer is baked on Italian Terracotta tile to create a weightless powder with multidimensional color that builds seamlessly. Choose from three flattering shades that always look authentically sunkissed.</p>",
+        "tab_2_title": "WHAT'S INSIDE IT",
+        "tab_2_content": "<p>Premium ingredients carefully selected for optimal performance and skin compatibility. Our formula includes natural minerals and nourishing components.</p>",
+        "tab_3_title": "HOW TO APPLY IT",
+        "tab_3_content": "<p>Using a large fluffy brush, gently sweep bronzer across areas where the sun naturally hits your face - forehead, cheeks, nose, and chin. Build gradually for a natural-looking glow.</p>",
+        "show_badges": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "main",
+    "product-tabs",
+    "related-products"
+  ]
+}

@@ -1,0 +1,276 @@
+.product-showcase {
+  background: var(--gradient-background);
+}
+
+.product-showcase__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.product-showcase__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 50rem;
+}
+
+.product-showcase__heading {
+  font-size: 4.8rem;
+  line-height: 1.1;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: rgb(var(--color-foreground));
+}
+
+.product-showcase__subheading {
+  font-size: 2rem;
+  line-height: 1.3;
+  font-weight: 300;
+  color: rgb(var(--color-foreground) / 0.8);
+}
+
+.product-showcase__description {
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: rgb(var(--color-foreground) / 0.7);
+}
+
+.product-showcase__button {
+  align-self: flex-start;
+  padding: 1.5rem 3rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgb(var(--color-foreground));
+  background: transparent;
+  color: rgb(var(--color-foreground));
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.product-showcase__button:hover {
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgb(var(--color-foreground) / 0.2);
+}
+
+.product-showcase__products {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+}
+
+.product-showcase__item {
+  position: relative;
+  background: rgb(var(--color-background));
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-showcase__item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgb(var(--color-foreground) / 0.1);
+}
+
+.product-showcase__image-container {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.product-showcase__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-showcase__item:hover .product-showcase__image {
+  transform: scale(1.05);
+}
+
+.product-showcase__badge {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: #ff9999;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 20px;
+  z-index: 2;
+}
+
+.product-showcase__product-info {
+  padding: 2rem;
+  text-align: center;
+}
+
+.product-showcase__product-title {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.product-showcase__product-title a {
+  color: rgb(var(--color-foreground));
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.product-showcase__product-title a:hover {
+  color: #ff9999;
+}
+
+.product-showcase__price {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: rgb(var(--color-foreground) / 0.8);
+}
+
+.product-showcase__product-description {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: rgb(var(--color-foreground) / 0.7);
+}
+
+/* Layout variations */
+.section-template--product-showcase-layout--right .product-showcase__container {
+  grid-template-columns: 1fr 1fr;
+  direction: rtl;
+}
+
+.section-template--product-showcase-layout--right .product-showcase__content,
+.section-template--product-showcase-layout--right .product-showcase__products {
+  direction: ltr;
+}
+
+/* Products per row variations */
+.section-template--product-showcase-products-per-row--1 .product-showcase__products {
+  grid-template-columns: 1fr;
+}
+
+.section-template--product-showcase-products-per-row--3 .product-showcase__products {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/* Responsive design */
+@media screen and (max-width: 990px) {
+  .product-showcase__container {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    text-align: center;
+  }
+  
+  .product-showcase__heading {
+    font-size: 3.6rem;
+  }
+  
+  .product-showcase__products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .section-template--product-showcase-products-per-row--3 .product-showcase__products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .product-showcase__container {
+    gap: 3rem;
+  }
+  
+  .product-showcase__heading {
+    font-size: 2.8rem;
+  }
+  
+  .product-showcase__subheading {
+    font-size: 1.6rem;
+  }
+  
+  .product-showcase__products {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .section-template--product-showcase-products-per-row--1 .product-showcase__products,
+  .section-template--product-showcase-products-per-row--3 .product-showcase__products {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-showcase__item {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+/* Section padding utility classes */
+.section-template--product-showcase-padding {
+  padding-top: var(--padding-top, 6rem);
+  padding-bottom: var(--padding-bottom, 6rem);
+}
+
+/* Color scheme integration */
+.color-scheme-1 {
+  --color-background: 255, 255, 255;
+  --color-foreground: 3, 3, 3;
+}
+
+.color-scheme-2 {
+  --color-background: 243, 243, 243;
+  --color-foreground: 18, 18, 18;
+}
+
+.color-scheme-3 {
+  --color-background: 36, 40, 51;
+  --color-foreground: 255, 255, 255;
+}
+
+.color-scheme-4 {
+  --color-background: 18, 18, 18;
+  --color-foreground: 255, 255, 255;
+}
+
+/* Elegant animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-showcase__content > * {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.product-showcase__content > *:nth-child(1) { animation-delay: 0.1s; }
+.product-showcase__content > *:nth-child(2) { animation-delay: 0.2s; }
+.product-showcase__content > *:nth-child(3) { animation-delay: 0.3s; }
+.product-showcase__content > *:nth-child(4) { animation-delay: 0.4s; }
+
+.product-showcase__item {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.product-showcase__item:nth-child(1) { animation-delay: 0.2s; }
+.product-showcase__item:nth-child(2) { animation-delay: 0.3s; }
+.product-showcase__item:nth-child(3) { animation-delay: 0.4s; }

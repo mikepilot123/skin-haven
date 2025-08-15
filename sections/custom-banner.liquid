@@ -1,0 +1,314 @@
+{% comment %}
+  Virtual Ring Sizer - Full-width hero section with background image and overlay content
+  Matches the design from the reference image with elegant typography and modern styling
+{% endcomment %}
+
+<style>
+  .virtual-ring-sizer {
+    position: relative;
+    width: 100%;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #f8f8f8;
+  }
+
+  .virtual-ring-sizer__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .virtual-ring-sizer__background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .virtual-ring-sizer__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+    z-index: 2;
+  }
+
+  .virtual-ring-sizer__content {
+    position: relative;
+    z-index: 3;
+    max-width: 600px;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #fff;
+  }
+
+  .virtual-ring-sizer__heading {
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.1em;
+    margin: 0 0 1.5rem 0;
+    text-transform: uppercase;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .virtual-ring-sizer__text {
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-weight: 400;
+    line-height: 1.6;
+    margin: 0 0 2.5rem 0;
+    opacity: 0.95;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+
+  .virtual-ring-sizer__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 30px;
+    font-size: 14px;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    gap: 8px;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+
+  .virtual-ring-sizer__button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s ease;
+  }
+
+  .virtual-ring-sizer__button:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+
+  .virtual-ring-sizer__button:hover::before {
+    left: 100%;
+  }
+
+  .virtual-ring-sizer__button:active {
+    transform: translateY(-1px);
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 768px) {
+    .virtual-ring-sizer {
+      min-height: 60vh;
+    }
+
+    .virtual-ring-sizer__content {
+      padding: 3rem 1.5rem;
+      max-width: 90%;
+    }
+
+    .virtual-ring-sizer__heading {
+      letter-spacing: 0.08em;
+      margin-bottom: 1.2rem;
+    }
+
+    .virtual-ring-sizer__text {
+      margin-bottom: 2rem;
+    }
+
+    .virtual-ring-sizer__button {
+      padding: 1rem 2rem;
+      font-size: 0.85rem;
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .virtual-ring-sizer {
+      min-height: 50vh;
+    }
+
+    .virtual-ring-sizer__content {
+      padding: 2.5rem 1rem;
+    }
+
+    .virtual-ring-sizer__overlay {
+      background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgba(0, 0, 0, 0.5) 100%
+      );
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .virtual-ring-sizer__overlay {
+      background: rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .virtual-ring-sizer__heading,
+    .virtual-ring-sizer__text,
+    .virtual-ring-sizer__button {
+      animation: none;
+    }
+
+    .virtual-ring-sizer__button {
+      transition: none;
+    }
+  }
+</style>
+
+<div class="virtual-ring-sizer">
+  <!-- Background Image -->
+  <div class="virtual-ring-sizer__background">
+    {% if section.settings.image != blank %}
+      <img
+        srcset="
+          {{ section.settings.image | image_url: width: 800 }} 800w,
+          {{ section.settings.image | image_url: width: 1200 }} 1200w,
+          {{ section.settings.image | image_url: width: 1600 }} 1600w,
+          {{ section.settings.image | image_url: width: 2000 }} 2000w,
+          {{ section.settings.image | image_url: width: 2400 }} 2400w
+        "
+        sizes="100vw"
+        src="{{ section.settings.image | image_url: width: 1600 }}"
+        alt="{{ section.settings.heading | escape }}"
+        width="1600"
+        height="900"
+        loading="lazy"
+      >
+    {% else %}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+    {% endif %}
+  </div>
+
+  <!-- Dark Overlay -->
+  <div class="virtual-ring-sizer__overlay"></div>
+
+  <!-- Content -->
+  <div class="virtual-ring-sizer__content">
+    {% if section.settings.heading != blank %}
+      <h2 class="virtual-ring-sizer__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% if section.settings.text != blank %}
+      <p class="virtual-ring-sizer__text">{{ section.settings.text }}</p>
+    {% endif %}
+
+    {% if section.settings.button_text != blank %}
+      <a
+        {% if section.settings.button_link == blank %}
+          role="link" aria-disabled="true"
+        {% else %}
+          href="{{ section.settings.button_link }}"
+        {% endif %}
+        class="virtual-ring-sizer__button"
+        {% if section.settings.button_link != blank %}
+          {% if section.settings.button_link contains 'http' %}
+            target="_blank" rel="noopener noreferrer"
+          {% endif %}
+        {% endif %}
+      >
+        {{ section.settings.button_text | escape }}
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Virtual Ring Sizer",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image",
+      "info": "Recommended: 1600x900px or larger. High-quality image showing rings or jewelry."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "VIRTUAL RING SIZER"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Description",
+      "default": "To help you find your perfect ring size, our experts have created a complete ring size guide just for you."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "TRY IT OUT"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Virtual Ring Sizer"
+    }
+  ]
+}
+{% endschema %}

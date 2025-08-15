@@ -1,0 +1,275 @@
+{{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .custom-announcement-bar {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    padding: {{ section.settings.padding_vertical }}px 0;
+    z-index: 100;
+  }
+
+  .custom-announcement-bar__container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+
+  .custom-announcement-bar__content {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: scrollText {{ section.settings.scroll_speed }}s linear infinite;
+    font-family: 'Nunito Sans', Arial, sans-serif;
+    font-size: {{ section.settings.font_size }}px;
+    font-weight: {{ section.settings.font_weight }};
+    letter-spacing: {{ section.settings.letter_spacing }}px;
+    text-transform: {% if section.settings.text_uppercase %}uppercase{% else %}none{% endif %};
+    width: max-content;
+  }
+
+  .custom-announcement-bar__text {
+    padding-right: 20px; /* Reduced space between repetitions */
+    display: inline-block;
+    min-width: max-content;
+  }
+
+  .custom-announcement-bar__link {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .custom-announcement-bar__link:hover {
+    opacity: 0.8;
+  }
+
+  .custom-announcement-bar__icon {
+    display: inline-block;
+    margin-left: 8px;
+    width: 12px;
+    height: 12px;
+    transition: transform 0.3s ease;
+  }
+
+  .custom-announcement-bar__link:hover .custom-announcement-bar__icon {
+    transform: translateX(3px);
+  }
+
+  @keyframes scrollText {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-20%);
+    }
+  }
+
+  /* Pause animation on hover */
+  .custom-announcement-bar:hover .custom-announcement-bar__content {
+    animation-play-state: {% if section.settings.pause_on_hover %}paused{% else %}running{% endif %};
+  }
+
+  /* Mobile adjustments */
+  @media screen and (max-width: 768px) {
+    .custom-announcement-bar__content {
+      font-size: {{ section.settings.font_size | minus: 2 }}px;
+      animation-duration: {{ section.settings.scroll_speed | plus: 3 }}s;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .custom-announcement-bar__content {
+      font-size: {{ section.settings.font_size | minus: 4 }}px;
+      animation-duration: {{ section.settings.scroll_speed | plus: 5 }}s;
+    }
+  }
+</style>
+
+<div class="custom-announcement-bar color-{{ section.settings.color_scheme }}">
+  <div class="custom-announcement-bar__container">
+    <div class="custom-announcement-bar__content">
+      {% for i in (1..5) %}
+        <div class="custom-announcement-bar__text">
+          {% if section.settings.announcement_link != blank %}
+            <a href="{{ section.settings.announcement_link }}" class="custom-announcement-bar__link">
+          {% endif %}
+
+          {{ section.settings.announcement_text | escape }}
+
+          {% if section.settings.announcement_link != blank and section.settings.show_arrow %}
+            <span class="custom-announcement-bar__icon">
+              <svg viewBox="0 0 12 12" fill="currentColor">
+                <path d="M4.5 2.25L8.25 6L4.5 9.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          {% endif %}
+
+          {% if section.settings.announcement_link != blank %}
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Announcement Bar",
+  "class": "custom-announcement-bar-section",
+  "enabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "announcement_text",
+      "label": "Announcement Text",
+      "default": "Free shipping on orders over $50 • New arrivals weekly • 30-day returns",
+      "info": "Enter the text you want to scroll across the screen"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Link (Optional)",
+      "info": "Make the entire announcement clickable"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Show Arrow Icon",
+      "default": true,
+      "info": "Display arrow icon when link is added"
+    },
+    {
+      "type": "header",
+      "content": "Animation Settings"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 10,
+      "max": 30,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll Speed",
+      "default": 15,
+      "info": "How long it takes to complete one scroll cycle"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on Hover",
+      "default": true,
+      "info": "Pause the scrolling animation when hovering"
+    },
+    {
+      "type": "header",
+      "content": "Typography Settings"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font Weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "min": 0,
+      "max": 3,
+      "step": 0.1,
+      "unit": "px",
+      "label": "Letter Spacing",
+      "default": 0.5
+    },
+    {
+      "type": "checkbox",
+      "id": "text_uppercase",
+      "label": "Uppercase Text",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Design Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical Padding",
+      "default": 12
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1",
+      "info": "Alternative to custom colors above"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Announcement Bar",
+      "settings": {
+        "announcement_text": "Free shipping on orders over $50 • New arrivals weekly • 30-day returns",
+        "scroll_speed": 30,
+        "font_size": 14,
+        "background_color": "#000000",
+        "text_color": "#ffffff"
+      }
+    }
+  ]
+}
+{% endschema %}

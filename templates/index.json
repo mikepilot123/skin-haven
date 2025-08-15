@@ -1,0 +1,323 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "two_column_images_kyt3Bh": {
+      "type": "two-column-images",
+      "name": "Two Column Images With Text",
+      "settings": {
+        "left_bg_image": "shopify://shop_images/Homepage_Desktop_2732x1134_01_2448x_734c061a-25ec-4b66-8b83-c1603ee04cf2.webp",
+        "heading": "CLEAR SKIN STARTS HERE.",
+        "subheading": "MAXIMUM STRENGTH BENZOYL PEROXIDE ACNE WASH",
+        "right_image": "shopify://shop_images/ChatGPT_Image_Jun_23_2025_10_18_29_PM.png",
+        "button_link": "shopify://products/panoxyl-10-benzoyl-peroxide-acne-forming-cleanser",
+        "button_text": "Shop Now"
+      }
+    },
+    "shop_by_category_hpddke": {
+      "type": "shop-by-category",
+      "blocks": {
+        "category_pVQpMq": {
+          "type": "category",
+          "settings": {
+            "collection": "",
+            "image": "shopify://shop_images/cerave-logo-png_seeklogo-352149.png",
+            "title": "",
+            "description": "",
+            "custom_url": ""
+          }
+        },
+        "category_4BPgQ7": {
+          "type": "category",
+          "settings": {
+            "collection": "homepage",
+            "title": "",
+            "description": "",
+            "custom_url": ""
+          }
+        },
+        "category_xWiwU6": {
+          "type": "category",
+          "settings": {
+            "collection": "test",
+            "title": "",
+            "description": "",
+            "custom_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_pVQpMq",
+        "category_4BPgQ7",
+        "category_xWiwU6"
+      ],
+      "name": "Shop by Category",
+      "settings": {
+        "heading": "Shop by Category",
+        "subheading": "Discover our curated collections designed for every style and occasion",
+        "columns_desktop": 3,
+        "columns_tablet": 2,
+        "columns_mobile": 1,
+        "grid_gap": 25,
+        "image_aspect_ratio": "4/3",
+        "text_alignment": "left",
+        "card_border_radius": 12,
+        "overlay_color": "#00000066",
+        "overlay_opacity": 30,
+        "overlay_hover_opacity": 50,
+        "heading_size": 36,
+        "subheading_size": 18,
+        "category_title_size": 24,
+        "category_description_size": 14,
+        "cta_size": 12,
+        "heading_transform": "none",
+        "category_title_transform": "uppercase",
+        "background_color": "#ffffff",
+        "heading_color": "#000000",
+        "subheading_color": "#666666",
+        "show_product_count": true,
+        "show_cta": true,
+        "cta_text": "Shop Now",
+        "show_view_all": true,
+        "view_all_text": "View All Categories",
+        "view_all_url": "shopify://collections",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "custom_featured_section_8Fd7iD": {
+      "type": "custom-featured-section",
+      "name": "New Arrivals Slider",
+      "settings": {
+        "heading": "NEW ARRIVALS",
+        "subheading": "<p>Get it here before anywhere else.</p>",
+        "button_text": "Shop All",
+        "button_link": "shopify://collections/all",
+        "collection": "homepage",
+        "text_position": "right",
+        "image_ratio": "square",
+        "show_vendor": false,
+        "show_rating": false,
+        "color_scheme": "background-1"
+      }
+    },
+    "custom_banner_h43E87": {
+      "type": "custom-banner",
+      "name": "Virtual Ring Sizer",
+      "settings": {
+        "heading": "VIRTUAL RING SIZER",
+        "text": "To help you find your perfect ring size, our experts have created a complete ring size guide just for you.",
+        "button_text": "TRY IT OUT",
+        "button_link": ""
+      }
+    },
+    "custom_featured_section_3PH7PD": {
+      "type": "custom-featured-section",
+      "name": "New Arrivals Slider",
+      "settings": {
+        "heading": "NEW ARRIVALS",
+        "subheading": "<p>Get it here before anywhere else.</p>",
+        "button_text": "Shop All",
+        "button_link": "shopify://collections/all",
+        "collection": "homepage",
+        "text_position": "left",
+        "image_ratio": "square",
+        "show_vendor": false,
+        "show_rating": false,
+        "color_scheme": "background-1"
+      }
+    },
+    "brands_showcase_YF3q6t": {
+      "type": "brands-showcase",
+      "blocks": {
+        "brand_k6rXiC": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Brand 1",
+            "brand_logo": "shopify://shop_images/PanOxyl.png",
+            "brand_url": "",
+            "open_in_new_tab": true
+          }
+        },
+        "brand_UirRE4": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Brand 2",
+            "brand_logo": "shopify://shop_images/CeraVeLogo.webp",
+            "brand_url": "",
+            "open_in_new_tab": true
+          }
+        },
+        "brand_Vyj7Ef": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Brand 3",
+            "brand_logo": "shopify://shop_images/images.png",
+            "brand_url": "",
+            "open_in_new_tab": true
+          }
+        },
+        "brand_F8HGYH": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Brand 4",
+            "brand_logo": "shopify://shop_images/Eucerin-logo.png",
+            "brand_url": "",
+            "open_in_new_tab": true
+          }
+        },
+        "brand_68FrPj": {
+          "type": "brand",
+          "settings": {
+            "brand_name": "Brand 5",
+            "brand_logo": "shopify://shop_images/Vanicream-Logo.png",
+            "brand_url": "",
+            "open_in_new_tab": true
+          }
+        }
+      },
+      "block_order": [
+        "brand_k6rXiC",
+        "brand_UirRE4",
+        "brand_Vyj7Ef",
+        "brand_F8HGYH",
+        "brand_68FrPj"
+      ],
+      "name": "Brands Showcase",
+      "settings": {
+        "heading": "Trusted brands we offer",
+        "subheading": "",
+        "columns_desktop": 5,
+        "columns_mobile": 2,
+        "grid_gap": 30,
+        "logo_height": 80,
+        "heading_size": 24,
+        "subheading_size": 16,
+        "heading_transform": "uppercase",
+        "background_color": "#ffffff",
+        "heading_color": "#000000",
+        "subheading_color": "#666666",
+        "item_background": "rgba(0,0,0,0)",
+        "logo_filter": "opacity(0.7)",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "testimonials_dHpCQA": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_66W4UP": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Amazing product and outstanding customer service! The quality exceeded my expectations and I couldn't be happier with my purchase.",
+            "author": "Sarah Johnson",
+            "featured_product": "panoxyl-10-benzoyl-peroxide-acne-forming-cleanser",
+            "image_link": "",
+            "button_text": "SHOP NOW",
+            "button_link": ""
+          }
+        },
+        "testimonial_gnr4Un": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Excellent service and fantastic products. The team went above and beyond to help me find exactly what I was looking for.",
+            "author": "Michael Chen",
+            "featured_product": "",
+            "image_link": "",
+            "button_text": "SHOP NOW",
+            "button_link": ""
+          }
+        },
+        "testimonial_NgEzcr": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Love everything about this company! Fast shipping, beautiful packaging, and the product quality is incredible.",
+            "author": "Emma Rodriguez",
+            "featured_product": "",
+            "image_link": "",
+            "button_text": "SHOP NOW",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_66W4UP",
+        "testimonial_gnr4Un",
+        "testimonial_NgEzcr"
+      ],
+      "name": "Testimonials",
+      "settings": {
+        "title": "WHAT OUR CUSTOMERS SAY",
+        "show_stars": true
+      }
+    },
+    "skincare_quiz_demo": {
+      "type": "skincare-quiz",
+      "name": "Skincare Quiz",
+      "settings": {
+        "question_1_title": "What's your age range?",
+        "cleanser_collection": "homepage",
+        "moisturizer_collection": "homepage", 
+        "serum_collection": "test",
+        "treatment_collection": "homepage",
+        "sunscreen_collection": "test",
+        "primary_color": "#00bcd4",
+        "accent_color": "#ff6b9d",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "email_subscription_Nm8Kj3": {
+      "type": "email-subscription",
+      "name": "Email Subscription",
+      "settings": {
+        "heading": "SIGN UP FOR OUR EMAIL LIST",
+        "subheading": "Get the latest updates, exclusive offers, and new product announcements.",
+        "placeholder_text": "Email Address...",
+        "button_text": "SIGN UP",
+        "disclaimer": "<p>I agree to receive promotional emails. You can unsubscribe at any time. By checking this box you accept our <a href=\"/policies/privacy-policy\">Privacy Policy</a>.</p>",
+        "success_message": "Thank you for subscribing! Check your email for confirmation.",
+        "error_message": "Something went wrong. Please try again.",
+        "heading_size": 28,
+        "subheading_size": 16,
+        "disclaimer_size": 12,
+        "heading_transform": "uppercase",
+        "background_color": "#f8f9fa",
+        "heading_color": "#000000",
+        "subheading_color": "#666666",
+        "disclaimer_color": "#888888",
+        "input_background": "#ffffff",
+        "input_text_color": "#000000",
+        "input_border_color": "#dddddd",
+        "input_focus_border": "#000000",
+        "input_focus_shadow": "rgba(0,0,0,0.1)",
+        "placeholder_color": "#999999",
+        "button_background": "transparent",
+        "button_color": "#000000",
+        "button_border": "#000000",
+        "button_hover_background": "#000000",
+        "button_hover_color": "#ffffff",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "two_column_images_kyt3Bh",
+    "shop_by_category_hpddke",
+    "custom_featured_section_8Fd7iD",
+    "custom_banner_h43E87",
+    "custom_featured_section_3PH7PD",
+    "brands_showcase_YF3q6t",
+    "testimonials_dHpCQA",
+    "skincare_quiz_demo",
+    "email_subscription_Nm8Kj3"
+  ]
+}

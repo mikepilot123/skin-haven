@@ -1,0 +1,384 @@
+/* Collection Page Styling */
+
+/* Collection Banner - Clean and Modern */
+.collection-banner {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 20px 0;
+  margin-bottom: 30px;
+}
+
+.collection-banner__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.collection-banner__left,
+.collection-banner__right {
+  flex: 1;
+}
+
+.collection-banner__center {
+  flex: 2;
+  text-align: center;
+}
+
+.collection-banner__title {
+  font-family: 'Arial', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #333333;
+  letter-spacing: 0.1em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Filter Toggle Button */
+.filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 2px solid #333333;
+  padding: 10px 16px;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+}
+
+.filter-toggle:hover {
+  background: #333333;
+  color: #ffffff;
+}
+
+.filter-toggle.active {
+  background: #333333;
+  color: #ffffff;
+}
+
+.filter-toggle__icon {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+  transition: all 0.3s ease;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sort Dropdown */
+.sort-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.sort-label {
+  color: #333333;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.sort-select {
+  position: relative;
+}
+
+.sort-dropdown {
+  background: #ffffff;
+  border: 2px solid #333333;
+  border-radius: 4px;
+  padding: 10px 40px 10px 16px;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  appearance: none;
+  cursor: pointer;
+  min-width: 160px;
+  outline: none;
+}
+
+.sort-dropdown:focus {
+  border-color: #666666;
+}
+
+.sort-select::after {
+  content: '▼';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #333333;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* Filter Panel Dropdown - Light Grey Container */
+.filter-panel {
+  background: #f5f5f5;
+  border: 1px solid #d0d0d0;
+  border-radius: 12px;
+  margin: 20px auto 30px;
+  padding: 0;
+  display: block; /* Show by default */
+  transition: all 0.3s ease-out;
+  width: 80%;
+  max-width: 960px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-panel.show {
+  display: block !important;
+  animation: slideDown 0.3s ease-out;
+}
+
+.filter-panel.hide {
+  display: none !important;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-panel__content {
+  padding: 30px;
+  background: #f5f5f5;
+  border-radius: 12px;
+}
+
+/* Filter Grid Layout - Clean Sidebar Style */
+.filter-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.filter-group {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  min-width: 200px;
+  flex: 1;
+}
+
+.filter-group__title {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333333;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Custom Checkboxes - Clean Style */
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+}
+
+.filter-option:hover {
+  background-color: #f5f5f5;
+}
+
+.filter-option input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cccccc;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.filter-option input[type="checkbox"]:checked {
+  background: #333333;
+  border-color: #333333;
+}
+
+.filter-option input[type="checkbox"]:checked::before {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.filter-option__label {
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  line-height: 1.4;
+}
+
+.filter-option input[type="checkbox"]:checked + .filter-option__label {
+  color: #333333;
+  font-weight: 600;
+}
+
+/* Product Grid Adjustments */
+.product-grid {
+  margin-top: 20px;
+}
+
+.grid__item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.grid__item.filtered-out {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+  display: none !important;
+}
+
+/* Clear Filters Button */
+.clear-filters-btn:hover {
+  background: #555 !important;
+}
+
+/* Loading states for better UX */
+.filter-option.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.filter-option.loading input[type="checkbox"] {
+  opacity: 0.5;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .collection-banner__content {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .collection-banner__left,
+  .collection-banner__right,
+  .collection-banner__center {
+    flex: none;
+    width: 100%;
+  }
+  
+  .collection-banner__title {
+    font-size: 24px;
+    margin: 12px 0;
+  }
+  
+  .sort-wrapper {
+    justify-content: center;
+  }
+  
+  .filter-panel {
+    margin: 0 10px 20px;
+  }
+  
+  .filter-panel__content {
+    padding: 20px;
+  }
+  
+  .filter-grid {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .filter-group {
+    min-width: auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .collection-banner {
+    padding: 15px 0;
+  }
+  
+  .collection-banner__content {
+    padding: 0 15px;
+  }
+  
+  .collection-banner__title {
+    font-size: 20px;
+    letter-spacing: 0.05em;
+  }
+  
+  .filter-toggle,
+  .sort-dropdown {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  
+  .sort-dropdown {
+    min-width: 140px;
+  }
+  
+  .filter-panel {
+    margin: 0 5px 15px;
+  }
+  
+  .filter-panel__content {
+    padding: 15px;
+  }
+  
+  .filter-group {
+    padding: 15px;
+  }
+}
+
+/* Alternative: Sidebar Layout for Larger Screens */
+@media screen and (min-width: 1200px) {
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+  }
+}

@@ -1,0 +1,241 @@
+{{ 'product-tabs.css' | asset_url | stylesheet_tag }}
+
+<div class="product-tabs-wrapper color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    <div class="product-tabs">
+      <nav class="product-tabs__nav" role="tablist">
+        <button class="product-tabs__tab active" 
+                role="tab" 
+                aria-selected="true" 
+                aria-controls="tab-why-love" 
+                id="tab-why-love-btn">
+          {{ section.settings.tab_1_title | default: "WHY YOU'LL LOVE IT" }}
+        </button>
+        <button class="product-tabs__tab" 
+                role="tab" 
+                aria-selected="false" 
+                aria-controls="tab-whats-inside" 
+                id="tab-whats-inside-btn">
+          {{ section.settings.tab_2_title | default: "WHAT'S INSIDE IT" }}
+        </button>
+        <button class="product-tabs__tab" 
+                role="tab" 
+                aria-selected="false" 
+                aria-controls="tab-how-apply" 
+                id="tab-how-apply-btn">
+          {{ section.settings.tab_3_title | default: "HOW TO APPLY IT" }}
+        </button>
+      </nav>
+
+      <div class="product-tabs__content">
+        <div class="product-tabs__panel active" 
+             role="tabpanel" 
+             id="tab-why-love" 
+             aria-labelledby="tab-why-love-btn">
+          <div class="product-tabs__text">
+            {{ section.settings.tab_1_content | default: product.description }}
+          </div>
+          {% if section.settings.show_badges %}
+            <div class="product-badges">
+              {% for block in section.blocks %}
+                {% if block.type == 'badge' %}
+                  <div class="product-badge">
+                    {% if block.settings.badge_icon %}
+                      <div class="product-badge__icon">
+                        {% render 'icon', icon: block.settings.badge_icon %}
+                      </div>
+                    {% endif %}
+                    <span class="product-badge__text">{{ block.settings.badge_text }}</span>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="product-tabs__panel" 
+             role="tabpanel" 
+             id="tab-whats-inside" 
+             aria-labelledby="tab-whats-inside-btn">
+          <div class="product-tabs__text">
+            {{ section.settings.tab_2_content | default: "Product ingredients and specifications will be displayed here." }}
+          </div>
+        </div>
+
+        <div class="product-tabs__panel" 
+             role="tabpanel" 
+             id="tab-how-apply" 
+             aria-labelledby="tab-how-apply-btn">
+          <div class="product-tabs__text">
+            {{ section.settings.tab_3_content | default: "Application instructions will be displayed here." }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'product-tabs.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Product Tabs",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Tab 1 - Why You'll Love It"
+    },
+    {
+      "type": "text",
+      "id": "tab_1_title",
+      "label": "Tab 1 Title",
+      "default": "WHY YOU'LL LOVE IT"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_1_content",
+      "label": "Tab 1 Content",
+      "default": "<p>When it comes to bronzer, we're all about baked. Milani Baked Bronzer gives skin natural warmth with a touch of soft shimmer. Like sister products Milani Baked Blush and Baked Highlighter, Baked Bronzer is baked on Italian Terracotta tile to create a weightless powder with multidimensional color that builds seamlessly. Choose from three flattering shades that always look authentically sunkissed.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Tab 2 - What's Inside"
+    },
+    {
+      "type": "text",
+      "id": "tab_2_title",
+      "label": "Tab 2 Title",
+      "default": "WHAT'S INSIDE IT"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_2_content",
+      "label": "Tab 2 Content",
+      "default": "<p>Key ingredients and product specifications.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Tab 3 - How to Apply"
+    },
+    {
+      "type": "text",
+      "id": "tab_3_title",
+      "label": "Tab 3 Title",
+      "default": "HOW TO APPLY IT"
+    },
+    {
+      "type": "richtext",
+      "id": "tab_3_content",
+      "label": "Tab 3 Content",
+      "default": "<p>Step-by-step application instructions.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Badge Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show product badges",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Product Badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "CRUELTY FREE"
+        },
+        {
+          "type": "select",
+          "id": "badge_icon",
+          "label": "Badge Icon",
+          "options": [
+            {
+              "value": "cruelty-free",
+              "label": "Cruelty Free"
+            },
+            {
+              "value": "vegan",
+              "label": "Vegan"
+            },
+            {
+              "value": "made-in",
+              "label": "Made In"
+            },
+            {
+              "value": "natural",
+              "label": "Natural"
+            }
+          ],
+          "default": "cruelty-free"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Tabs",
+      "blocks": [
+        {
+          "type": "badge",
+          "settings": {
+            "badge_text": "CRUELTY FREE",
+            "badge_icon": "cruelty-free"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "badge_text": "VEGAN",
+            "badge_icon": "vegan"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "badge_text": "MADE IN ITALY",
+            "badge_icon": "made-in"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

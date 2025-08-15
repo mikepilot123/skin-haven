@@ -1,0 +1,154 @@
+<style>
+  .two-column-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;    /* make both columns the same height */
+    height: calc(100vh - var(--header-height, 100px) - var(--announcement-bar-height, 40px)); /* fill remaining space after header and announcement bar */
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .two-column-wrapper.animated {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .left-column,
+  .right-column {
+    /* these rules now apply to both columns */
+    position: relative;
+    overflow: hidden;        /* clip anything that overflows */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;  /* this only does anything on .left-column */
+    background-position: center;
+  }
+
+  .right-column img {
+    width: 100%;
+    height: 100%;
+    object-fit:fill ;       /* crop or scale to fill the box */
+  }
+
+  .overlay-content {
+    text-align: center;
+    max-width: 400px;
+  }
+
+  .btn {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 12px 30px;
+    background: black;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  @media(max-width: 768px) {
+    .two-column-wrapper {
+      grid-template-columns: 1fr;
+      height: calc(100vh - var(--header-height, 100px) - var(--announcement-bar-height, 40px)); /* fill remaining space after header and announcement bar */
+      min-height: 350px;
+    }
+    .overlay-content {
+      padding: 2rem 1.2rem 2rem 1.2rem;
+      /* background: rgba(255,255,255,0.92);  subtle background for contrast */
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      margin: 0 auto;
+      max-width: 95vw;
+    }
+    .overlay-content h1 {
+      margin-bottom: 1.4rem;
+    }
+    .overlay-content h2 {
+      margin-bottom: 1.2rem;
+    }
+    .overlay-content .btn {
+      margin-top: 1.8rem;
+    }
+    .overlay-content > *:not(:last-child) {
+      margin-bottom: 1.2rem;
+    }
+  }
+</style>
+<div class="two-column-wrapper">
+  <div class="left-column" style="background-image: url({{ section.settings.left_bg_image | image_url: width: 600 }});">
+    <div class="overlay-content">
+      <h1>{{ section.settings.heading }}</h1>
+      <h2>{{ section.settings.subheading }}</h2>
+      {% if section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="btn">{{ section.settings.button_text }}</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="right-column">
+    {% if section.settings.right_image %}
+      {{ section.settings.right_image | image_url: width: 1500 | image_tag }}
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var section = document.querySelector('.two-column-wrapper');
+    if (!section) return;
+    var observer = new window.IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          section.classList.add('animated');
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(section);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Two Img Column Row",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "left_bg_image",
+      "label": "Left Background Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Your subheading text."
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right Side Image"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two Column with Background Image"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,141 @@
+/* Floating Footer Styles - Upwork Style */
+
+/* Create a white background wrapper for the floating effect */
+body {
+  position: relative;
+  background-color: #ffffff; /* White background around footer */
+}
+
+/* Footer wrapper for white background */
+.footer-wrapper {
+  background-color: #ffffff;
+  padding: 40px 20px;
+  margin-top: 60px;
+}
+
+.footer {
+  margin: 0 auto; /* Center the footer */
+  border-radius: 16px; /* Rounded corners */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); /* Subtle shadow for floating effect */
+  border: 1px solid #e1e5e9; /* Light border like Upwork */
+  background-color: #fafbfc; /* Very light grey background */
+  overflow: hidden; /* Ensures content stays within rounded corners */
+  max-width: 1200px; /* Maximum width */
+  width: 100%;
+}
+
+.footer:not(.color-scheme-1) {
+  border-top: none; /* Override default border for all color schemes */
+}
+
+/* Ensure footer content has proper padding within the rounded container */
+.footer__content-top {
+  padding: 5rem 4rem 3rem 4rem; /* Adjusted padding for better spacing */
+}
+
+.footer__content-bottom {
+  border-top: solid 0.1rem rgba(var(--color-foreground), 0.08);
+  padding: 3rem 4rem; /* Consistent padding with top content */
+}
+
+/* Enhanced responsive design */
+@media screen and (max-width: 749px) {
+  .footer-wrapper {
+    padding: 20px 10px;
+    margin-top: 40px;
+  }
+  
+  .footer {
+    border-radius: 12px; /* Smaller border radius on mobile */
+  }
+  
+  .footer__content-top {
+    padding: 3rem 2rem; /* Reduced padding on mobile */
+  }
+  
+  .footer__content-bottom {
+    padding: 2rem; /* Reduced padding on mobile */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer-wrapper {
+    padding: 15px 5px;
+    margin-top: 30px;
+  }
+  
+  .footer {
+    border-radius: 10px;
+  }
+  
+  .footer__content-top {
+    padding: 2rem 1.5rem;
+  }
+  
+  .footer__content-bottom {
+    padding: 1.5rem;
+  }
+}
+
+/* Enhanced tablet styles */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .footer-wrapper {
+    padding: 30px 15px;
+    margin-top: 50px;
+  }
+  
+  .footer {
+    border-radius: 14px;
+  }
+}
+
+/* Large desktop styles */
+@media screen and (min-width: 1200px) {
+  .footer-wrapper {
+    padding: 60px 40px;
+    margin-top: 80px;
+  }
+  
+  .footer {
+    border-radius: 18px;
+  }
+}
+
+/* Ensure the footer doesn't stick to the bottom on long pages */
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Optional: Add a subtle background pattern or texture */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.02;
+  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.15) 1px, transparent 0);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Enhanced footer block styling within the floating container */
+.footer-block {
+  position: relative;
+  z-index: 2; /* Ensure content is above the background pattern */
+}
+
+/* Smooth hover effects for the floating footer */
+.footer {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (hover: hover) {
+  .footer:hover {
+    transform: translateY(-2px); /* Subtle lift effect on hover */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+  }
+}

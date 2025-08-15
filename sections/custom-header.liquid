@@ -1,0 +1,98 @@
+<style>
+  .custom-header-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 2rem 0 2rem;
+    position: relative;
+  }
+  .custom-header-logo {
+    text-align: center;
+    flex: 1;
+  }
+  .custom-header-icons {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .custom-header-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin: 1.5rem 0 0 0;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    font-size: 1.2rem;
+  }
+  .custom-header-nav a {
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    padding-bottom: 0.2rem;
+  }
+  .custom-header-nav a.active,
+  .custom-header-nav a:hover {
+    border-bottom: 2px solid #000;
+  }
+  .custom-header-icons .svg-wrapper {
+    width: 2.2rem;
+    height: 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<header class="custom-header-wrapper">
+  <div class="custom-header-logo">
+    <a href="{{ routes.root_url }}">
+      {% if settings.logo != blank %}
+        {{ settings.logo | image_url: width: 300 | image_tag }}
+      {% else %}
+        <h1>{{ shop.name }}</h1>
+      {% endif %}
+    </a>
+  </div>
+  <div class="custom-header-icons">
+    {% render 'header-search', input_id: 'Search-In-Modal' %}
+    <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
+      <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+    </a>
+    <a href="{{ routes.cart_url }}" id="cart-icon-bubble">
+      {% if cart == empty %}
+        <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+      {% else %}
+        <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+      {% endif %}
+    </a>
+  </div>
+</header>
+<nav class="custom-header-nav">
+  {% for link in linklists.main-menu.links %}
+    <a href="{{ link.url }}"{% if link.active %} class="active"{% endif %}>{{ link.title }}</a>
+  {% endfor %}
+</nav>
+
+{% schema %}
+{
+  "name": "Custom Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    }
+  ],
+
+   "presets": [
+    {
+      "name": "Custom Header",
+      "category": "Header"
+    }
+  ]
+}
+{% endschema %}
