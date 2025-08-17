@@ -60,7 +60,7 @@
 .card-wrapper .card__media img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;
+  object-fit: contain !important;
   object-position: center;
   transition: transform 0.3s ease;
   position: absolute !important;
